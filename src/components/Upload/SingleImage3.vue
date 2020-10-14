@@ -4,7 +4,6 @@
       :data="dataObj"
       :multiple="false"
       :show-file-list="false"
-      :on-success="handleImageSuccess"
       class="image-uploader"
       drag
       action=""
@@ -64,9 +63,6 @@ export default {
     emitInput(val) {
       this.$emit('input', val)
     },
-    handleImageSuccess(file) {
-      this.emitInput(file.files.file)
-    },
     beforeUpload() {
       const _self = this
       return new Promise((resolve, reject) => {
@@ -83,11 +79,12 @@ export default {
         })
       })
     },
-    handleUpload() {
+    handleUpload(params) {
+      const file = params.file
       return new Promise((resolve, reject) => {
-        uploadFile().then(response => {
-          console.log(response.data)
-          // const key = response.data
+        uploadFile(file).then(response => {
+          this.value = response.data
+          this.emitInput(response.data)
           resolve(true)
         }).catch(err => {
           console.log(err)
