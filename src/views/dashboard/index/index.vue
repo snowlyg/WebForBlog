@@ -5,13 +5,16 @@
         <el-col v-for="(item) in aritcles" :key="item.id" :span="24">
           <el-card :body-style="{ padding: '0px' }">
             <div style="padding: 14px;">
-              <img src="item.image_uri" alt="">
-              <span> {{ item.title }}</span>
-              <div> {{ item.content_short }}</div>
-              <div class="bottom clearfix">
-                <span> [{{ item.author }}] </span>
-                <time class="time">{{ item.display_time | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</time>
+              <img :src="item.image_uri" alt="" class="image">
+              <div class="left_content">
+                <div class="content_title"> {{ item.title }}</div>
+                <div class="content_short"> {{ item.content_short }}</div>
+                <div class="auth_content">
+                  <span>作者：{{ item.author }} </span>
+                  <time class="time">发布时间：{{ item.display_time | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</time>
+                </div>
               </div>
+              <div class="bottom clearfix" />
             </div>
           </el-card>
         </el-col>
@@ -49,19 +52,36 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.bottom {
-  margin-top: 13px;
-  line-height: 12px;
-}
-
-.button {
-  padding: 0;
-  float: right;
-}
 
 .image {
-  width: 100%;
-  display: block;
+  width: 150px;
+  border-style: none;
+  height: 150px;
+  float: left;
+  margin-right: 10px;
+}
+
+.left_content {
+  .content_title {
+    font-size: 1.5em;
+    margin-top:5px;
+  }
+
+  .content_short {
+    font-size: 1.0em;
+    color: #666;
+    height: 64px;
+    padding: 5px 0;
+  }
+
+  .auth_content {
+    font-size: 0.85em;
+    color: #aaa;
+    time{
+      margin-left: 30px;
+    }
+  }
+
 }
 
 .clearfix:before,
