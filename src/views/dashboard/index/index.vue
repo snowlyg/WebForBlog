@@ -7,7 +7,9 @@
             <div style="padding: 14px;">
               <img :src="item.image_uri" alt="" class="image">
               <div class="left_content">
-                <div class="content_title"> {{ item.title }}</div>
+                <router-link :to="'/detail/'+item.id" class="link-type">
+                  <div class="content_title"> {{ item.title }}</div>
+                </router-link>
                 <div class="content_short"> {{ item.content_short }}</div>
                 <div class="auth_content">
                   <span>作者：{{ item.author }} </span>

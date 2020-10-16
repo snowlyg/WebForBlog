@@ -1,5 +1,5 @@
 module.exports = {
-  title: 'IrisAdminApi',
+  title: 'Snowlyg Blog',
 
   /**
    * @type {boolean} true | false

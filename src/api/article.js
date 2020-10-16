@@ -7,6 +7,12 @@ export function indexList(query) {
     params: query
   })
 }
+export function indexDetail(id) {
+  return request({
+    url: `/article/${id}`,
+    method: 'get'
+  })
+}
 export function fetchList(query) {
   return request({
     url: '/admin/article',

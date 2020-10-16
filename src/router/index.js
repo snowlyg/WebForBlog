@@ -60,8 +60,11 @@ export const constantRoutes = [
       {
         path: '/',
         component: () => import('@/views/dashboard/index/index'),
-        name: '学习笔记',
-        meta: { title: '学习笔记', icon: 'dashboard', affix: true }
+        hidden: true
+      }, {
+        path: '/detail/:id(\\d+)',
+        component: () => import('@/views/dashboard/index/detail'),
+        hidden: true
       }
     ]
   },
