@@ -89,7 +89,7 @@
           <markdown-editor
             ref="markdownEditor"
             v-model="content"
-            :options="{hideModeSwitch:true,previewStyle:'tab'}"
+            :options="{hideModeSwitch:true,previewStyle:'vertical'}"
             height="400px"
           />
         </el-form-item>
@@ -340,7 +340,7 @@ export default {
       })
     },
     getHtml() {
-      this.postForm.content = this.$refs.markdownEditor.getHtml()
+      this.postForm.content = this.$refs.markdownEditor.getValue()
     }
   }
 }

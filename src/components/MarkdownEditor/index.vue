@@ -7,6 +7,9 @@
 import 'codemirror/lib/codemirror.css' // Editor's Dependency Style
 import '@toast-ui/editor/dist/toastui-editor.css' // Editor's Style
 import Editor from '@toast-ui/editor'
+import 'highlight.js/styles/github.css'
+import hljs from 'highlight.js'
+import codeSyntaxHighlight from '@toast-ui/editor-plugin-code-syntax-highlight'
 import defaultOptions from './default-options'
 export default {
   name: 'MarkdownEditor',
@@ -54,6 +57,7 @@ export default {
       options.initialEditType = this.mode
       options.height = this.height
       options.language = this.language
+      options.plugins = [[codeSyntaxHighlight, { hljs }]]
       return options
     }
   },

@@ -4,16 +4,14 @@
       <el-row>
         <el-card :body-style="{ padding: '0px' }">
           <div style="padding: 14px;">
-            <div class="content_title">{{ detail.title }} </div>
+            <div class="content_title">{{ detail.title }}</div>
             <div class="auth_content">
               <span>作者：{{ detail.author }} </span>
               <time class="time">发布时间：{{ detail.display_time }}</time>
             </div>
-
             <hr>
-
-            <div class="left_content">
-              <div class="content_short"> {{ detail.content }}</div>
+            <div>
+              <div id="viewer" />
             </div>
             <div class="bottom clearfix" />
           </div>
@@ -26,6 +24,11 @@
 <script>
 import { mapGetters } from 'vuex'
 import { indexDetail } from '@/api/article'
+import '@toast-ui/editor/dist/toastui-editor-viewer.css'
+import Viewer from '@toast-ui/editor/dist/toastui-editor-viewer'
+import 'highlight.js/styles/github.css'
+import hljs from 'highlight.js'
+import codeSyntaxHighlight from '@toast-ui/editor-plugin-code-syntax-highlight'
 
 const defaultDetail = {
   status: 'draft',
@@ -42,7 +45,6 @@ const defaultDetail = {
 }
 
 export default {
-
   name: 'DashboardEditor',
   components: {},
   data() {
@@ -59,7 +61,13 @@ export default {
       this.listLoading = true
       indexDetail(id).then(response => {
         this.detail = response.data
-        console.log(this.detail)
+
+        new Viewer({
+          el: document.querySelector('#viewer'),
+          height: '600px',
+          initialValue: this.detail.content,
+          plugins: [[codeSyntaxHighlight, { hljs }]]
+        })
       })
     }
   },

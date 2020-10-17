@@ -27,5 +27,6 @@ export default {
     'divider',
     'code',
     'codeblock'
-  ]
+  ],
+  plugins: []
 }
