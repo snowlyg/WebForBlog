@@ -160,6 +160,15 @@ export const asyncRoutes = [
           title: '角色页面',
           roles: ['admin']
         }
+      },
+      {
+        path: '/admin/permission/config',
+        component: () => import('@/views/permission/config'),
+        name: '系统配置页面',
+        meta: {
+          title: '系统配置页面',
+          roles: ['admin']
+        }
       }
     ]
   },

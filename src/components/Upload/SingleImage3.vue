@@ -83,7 +83,7 @@ export default {
       const file = params.file
       return new Promise((resolve, reject) => {
         uploadFile(file).then(response => {
-          this.value = response.data
+          // this.value = response.data
           this.emitInput(response.data)
           resolve(true)
         }).catch(err => {
