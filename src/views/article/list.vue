@@ -35,7 +35,7 @@
 
       <el-table-column class-name="status-col" label="是否发布" width="110">
         <template slot-scope="scope">
-          {{ scope.status }}
+          {{ scope.row.status }}
         </template>
       </el-table-column>
 
@@ -108,15 +108,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-  .edit-input {
-    padding-right: 100px;
-  }
-
-  .cancel-btn {
-    position: absolute;
-    right: 15px;
-    top: 10px;
-  }
-</style>
