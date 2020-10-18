@@ -205,6 +205,22 @@ export default {
       }
     }
   },
+
+  watch: {
+    routes() {
+      this.searchPool = this.generateRoutes(this.routes)
+    },
+    searchPool(list) {
+      this.initFuse(list)
+    },
+    show(value) {
+      if (value) {
+        document.body.addEventListener('click', this.close)
+      } else {
+        document.body.removeEventListener('click', this.close)
+      }
+    }
+  },
   created() {
     if (this.isEdit) {
       const id = this.$route.params && this.$route.params.id

@@ -1,10 +1,19 @@
 <template>
   <div class="components-container">
+    <div class="header-search text-center">
+      <el-input
+        v-model="title"
+        class="search"
+        placeholder="请输入内容"
+        @input="handleSearch"
+      />
+    </div>
+
     <div class="dashboard-editor-container">
       <el-row>
-        <el-col v-for="(item) in aritcles" :key="item.id" :span="24">
+        <el-col v-for="(item) in aritcles" :key="item.id" class="el-card-div" :span="24">
           <el-card>
-            <div class="el-card-div">
+            <div>
               <img :src="item.image_uri" alt="" class="image">
               <div class="left_content">
                 <router-link target="_blank" :to="'/detail/'+item.id" class="link-type">
@@ -43,9 +52,12 @@ export default {
     return {
       aritcles: [],
       total: 0,
+      title: '',
       listQuery: {
+        searchStr: '',
+        orderBy: 'display_time',
         offset: 1,
-        limit: 1
+        limit: 10
       }
     }
   },
@@ -58,6 +70,10 @@ export default {
         this.total = response.data.total
         this.listQuery.limit = response.data.limit
       })
+    },
+    handleSearch() {
+      this.listQuery.searchStr = 'title:' + this.title
+      this.getData()
     }
   },
   // eslint-disable-next-line vue/order-in-components
@@ -69,10 +85,12 @@ export default {
 
 <style lang="scss" scoped>
 
-@media (max-width:500px) {
-
-  .el-card-div{
-    padding: 0px;
+@media (max-width: 500px) {
+  .header-search{
+    margin: 20px 40px;
+  }
+  .el-card-div {
+    margin: 5px 0;
   }
 
   .image {
@@ -86,9 +104,10 @@ export default {
 
   .left_content {
     min-height: 95px;
+
     .content_title {
       font-size: 0.85em;
-      margin:5px 0;
+      margin: 5px 0;
     }
 
     .content_short {
@@ -101,7 +120,8 @@ export default {
     .auth_content {
       font-size: 0.45em;
       color: #aaa;
-      time{
+
+      time {
         margin-left: 5px;
       }
     }
@@ -121,7 +141,7 @@ export default {
   .components-container {
     margin: 10px 0;
     position: relative;
-    height: 100vh;
+    //height: 100vh;
 
   }
 
@@ -155,9 +175,13 @@ export default {
   }
 }
 
-@media (min-width:501px) {
-  .el-card-div{
-    padding: 14px;
+@media (min-width: 501px) {
+  .header-search{
+    margin: 20px 40px;
+  }
+
+  .el-card-div {
+    margin: 10px 0;
   }
 
   .image {
@@ -171,6 +195,7 @@ export default {
 
   .left_content {
     height: 150px;
+
     .content_title {
       font-size: 1.5em;
       margin: 15px;
@@ -186,7 +211,8 @@ export default {
     .auth_content {
       font-size: 0.85em;
       color: #aaa;
-      time{
+
+      time {
         margin-left: 30px;
       }
     }
@@ -206,7 +232,7 @@ export default {
   .components-container {
     margin: 0;
     position: relative;
-    height: 100vh;
+    //height: 100vh;
 
   }
 
