@@ -26,7 +26,7 @@
       </el-table-column>
     </el-table>
 
-    <el-dialog :visible.sync="dialogVisible" :title="dialogType==='edit'?'编辑权限':'添加权限'">
+    <el-dialog :visible.sync="dialogVisible" :title="dialogType==='edit'?'编辑配置':'添加配置'">
       <el-form :model="config" label-width="80px" label-position="left">
         <el-form-item label="Name">
           <el-input v-model="config.name" placeholder="Name" />
@@ -96,7 +96,7 @@ export default {
       })
     },
     handleDelete({ $index, row }) {
-      this.$confirm('确认移除这个权限吗?', 'Warning', {
+      this.$confirm('确认移除这个配置吗?', 'Warning', {
         confirmButtonText: '确认',
         cancelButtonText: '取消',
         type: 'warning'

@@ -3,8 +3,8 @@
     <div class="dashboard-editor-container">
       <el-row>
         <el-col v-for="(item) in aritcles" :key="item.id" :span="24">
-          <el-card :body-style="{ padding: '0px' }">
-            <div style="padding: 14px;">
+          <el-card>
+            <div class="el-card-div">
               <img :src="item.image_uri" alt="" class="image">
               <div class="left_content">
                 <router-link target="_blank" :to="'/detail/'+item.id" class="link-type">
@@ -16,11 +16,17 @@
                   <time class="time">发布时间：{{ item.display_time | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</time>
                 </div>
               </div>
-              <div class="bottom clearfix" />
+              <div class=" clearfix" />
             </div>
           </el-card>
         </el-col>
       </el-row>
+      <simple-pagination
+        :total="total"
+        :page.sync="listQuery.offset"
+        :limit.sync="listQuery.limit"
+        @pagination="getData"
+      />
     </div>
   </div>
 </template>
@@ -28,21 +34,29 @@
 <script>
 import { mapGetters } from 'vuex'
 import { indexList } from '@/api/article'
+import SimplePagination from '@/components/SimplePagination'
 
 export default {
   name: 'DashboardEditor',
-  components: {},
+  components: { SimplePagination },
   data() {
     return {
-      aritcles: []
+      aritcles: [],
+      total: 0,
+      listQuery: {
+        offset: 1,
+        limit: 1
+      }
     }
   },
   created() { this.getData() },
   methods: {
     getData() {
       this.listLoading = true
-      indexList().then(response => {
+      indexList(this.listQuery).then(response => {
         this.aritcles = response.data.items
+        this.total = response.data.total
+        this.listQuery.limit = response.data.limit
       })
     }
   },
@@ -55,79 +69,173 @@ export default {
 
 <style lang="scss" scoped>
 
-.image {
-  width: 150px;
-  border-style: none;
-  height: 150px;
-  float: left;
-  margin-right: 10px;
-}
+@media (max-width:500px) {
 
-.left_content {
-  .content_title {
-    font-size: 1.5em;
-    margin-top:5px;
+  .el-card-div{
+    padding: 0px;
   }
 
-  .content_short {
-    font-size: 1.0em;
-    color: #666;
-    height: 64px;
-    padding: 5px 0;
+  .image {
+    width: 90px;
+    height: 90px;
+    border-style: none;
+    float: left;
+    margin-right: 5px;
+    padding: 0px;
   }
 
-  .auth_content {
-    font-size: 0.85em;
-    color: #aaa;
-    time{
-      margin-left: 30px;
+  .left_content {
+    min-height: 95px;
+    .content_title {
+      font-size: 0.85em;
+      margin:5px 0;
+    }
+
+    .content_short {
+      font-size: 0.5em;
+      color: #666;
+      min-height: 40px;
+      padding: 0px 0;
+    }
+
+    .auth_content {
+      font-size: 0.45em;
+      color: #aaa;
+      time{
+        margin-left: 5px;
+      }
+    }
+
+  }
+
+  .clearfix:before,
+  .clearfix:after {
+    display: table;
+    content: "";
+  }
+
+  .clearfix:after {
+    clear: both
+  }
+
+  .components-container {
+    margin: 10px 0;
+    position: relative;
+    height: 100vh;
+
+  }
+
+  .dashboard-editor-container {
+    width: 100%;
+    background-color: #e3e3e3;
+    min-height: 100vh;
+    padding: 10px;
+  }
+
+  .pan-info-roles {
+    font-size: 12px;
+    font-weight: 700;
+    color: #333;
+    display: block;
+  }
+
+  .info-container {
+    position: relative;
+    margin-left: 190px;
+    height: 150px;
+    line-height: 200px;
+
+    .display_name {
+      font-size: 48px;
+      line-height: 48px;
+      color: #212121;
+      position: absolute;
+      top: 25px;
     }
   }
-
 }
 
-.clearfix:before,
-.clearfix:after {
-  display: table;
-  content: "";
-}
+@media (min-width:501px) {
+  .el-card-div{
+    padding: 14px;
+  }
 
-.clearfix:after {
-  clear: both
-}
+  .image {
+    width: 150px;
+    border-style: none;
+    height: 150px;
+    float: left;
+    margin-right: 30px;
+    padding: 5px;
+  }
 
-.components-container {
-  margin: 0;
-  position: relative;
-  height: 100vh;
+  .left_content {
+    height: 150px;
+    .content_title {
+      font-size: 1.5em;
+      margin: 15px;
+    }
 
-}
+    .content_short {
+      font-size: 1.0em;
+      color: #666;
+      min-height: 70px;
+      padding: 5px 0;
+    }
 
-.dashboard-editor-container {
-  background-color: #e3e3e3;
-  min-height: 100vh;
-  padding: 60px 350px;
-}
+    .auth_content {
+      font-size: 0.85em;
+      color: #aaa;
+      time{
+        margin-left: 30px;
+      }
+    }
 
-.pan-info-roles {
-  font-size: 12px;
-  font-weight: 700;
-  color: #333;
-  display: block;
-}
+  }
 
-.info-container {
-  position: relative;
-  margin-left: 190px;
-  height: 150px;
-  line-height: 200px;
+  .clearfix:before,
+  .clearfix:after {
+    display: table;
+    content: "";
+  }
 
-  .display_name {
-    font-size: 48px;
-    line-height: 48px;
-    color: #212121;
-    position: absolute;
-    top: 25px;
+  .clearfix:after {
+    clear: both
+  }
+
+  .components-container {
+    margin: 0;
+    position: relative;
+    height: 100vh;
+
+  }
+
+  .dashboard-editor-container {
+    background-color: #e3e3e3;
+    min-height: 100vh;
+    padding: 35px;
+  }
+
+  .pan-info-roles {
+    font-size: 12px;
+    font-weight: 700;
+    color: #333;
+    display: block;
+  }
+
+  .info-container {
+    position: relative;
+    margin-left: 190px;
+    height: 150px;
+    line-height: 200px;
+
+    .display_name {
+      font-size: 48px;
+      line-height: 48px;
+      color: #212121;
+      position: absolute;
+      top: 25px;
+    }
   }
 }
 </style>

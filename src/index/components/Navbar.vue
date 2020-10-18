@@ -1,8 +1,14 @@
 <template>
   <div class="navbar">
     <div class="text-center">
-      <pan-thumb width="150px" height="150px" image="">snowlyg</pan-thumb>
+      <pan-thumb image="">snowlyg</pan-thumb>
     </div>
+    <div class="other_web text-center">
+      <p>努力决定一切，不向命运屈服</p>
+      <a href="https://github.com/snowlyg" target="_blank"><svg-icon icon-class="github-square" class="github" /></a>
+      <a href="https://learnku.com/blog/about_laravel" target="_blank"><svg-icon icon-class="laravel" class="laravel" /></a>
+    </div>
+
   </div>
 </template>
 
@@ -20,16 +26,34 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.navbar {
-  height: 250px;
 
-  //overflow: hidden;
-  //position: relative;
-  //background: #fff;
-  //-webkit-box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .1), 0 1px 2px 0 rgba(0, 0, 0, .06);
-  //box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .1), 0 1px 2px 0 rgba(0, 0, 0, .06);
-  //border-top: 4px solid #368cda;
-  //color: #777;
+.other_web {
+  p {
+    color: #bbb;
+    font-size: 14px;
+  }
+  margin: 15px 0;
+  .github{
+    margin: 9px 5px;
+    font-size: 24px;
+    color: #242A2E;
+  }
+  .laravel{
+    margin: 10px 5px;
+    font-size: 21px;
+    color: #FF2B1C;
+  }
 }
 
+@media (max-width: 500px) {
+  .navbar {
+    height: 220px;
+  }
+}
+
+@media (min-width: 501px) {
+  .navbar {
+    height: 315px;
+  }
+}
 </style>

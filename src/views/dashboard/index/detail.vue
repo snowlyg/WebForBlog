@@ -17,6 +17,10 @@
           </div>
         </el-card>
       </el-row>
+      <!-- you can add element-ui's tooltip -->
+      <el-tooltip placement="top" content="返回顶部">
+        <back-to-top :custom-style="myBackToTopStyle" :visibility-height="300" :back-position="50" transition-name="fade" />
+      </el-tooltip>
     </div>
   </div>
 </template>
@@ -29,6 +33,7 @@ import Viewer from '@toast-ui/editor/dist/toastui-editor-viewer'
 import 'highlight.js/styles/github.css'
 import hljs from 'highlight.js'
 import codeSyntaxHighlight from '@toast-ui/editor-plugin-code-syntax-highlight'
+import BackToTop from '@/components/BackToTop'
 
 const defaultDetail = {
   status: 'draft',
@@ -46,10 +51,20 @@ const defaultDetail = {
 
 export default {
   name: 'DashboardEditor',
-  components: {},
+  components: { BackToTop },
   data() {
     return {
-      detail: Object.assign({}, defaultDetail)
+      detail: Object.assign({}, defaultDetail),
+      // customizable button style, show/hide critical point, return position
+      myBackToTopStyle: {
+        right: '30px',
+        bottom: '70px',
+        width: '40px',
+        height: '40px',
+        'border-radius': '4px',
+        'line-height': '45px', // 请保持与高度一致以垂直居中 Please keep consistent with height to center vertically
+        background: '#e7eaf1'// 按钮的背景颜色 The background color of the button
+      }
     }
   },
   created() {
@@ -93,7 +108,6 @@ export default {
 .components-container {
   margin: 0;
   position: relative;
-  height: 100vh;
 
 }
 
@@ -109,6 +123,7 @@ export default {
   }
 
   .auth_content {
+    text-align: center;
     font-size: 0.65em;
     color: #aaa;
     margin-left: 30px;
