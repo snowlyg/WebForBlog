@@ -19,7 +19,12 @@
       </el-row>
       <!-- you can add element-ui's tooltip -->
       <el-tooltip placement="top" content="返回顶部">
-        <back-to-top :custom-style="myBackToTopStyle" :visibility-height="300" :back-position="50" transition-name="fade" />
+        <back-to-top
+          :custom-style="myBackToTopStyle"
+          :visibility-height="300"
+          :back-position="50"
+          transition-name="fade"
+        />
       </el-tooltip>
     </div>
   </div>
@@ -95,73 +100,146 @@ export default {
 
 <style lang="scss" scoped>
 
-.clearfix:before,
-.clearfix:after {
-  display: table;
-  content: "";
-}
-
-.clearfix:after {
-  clear: both
-}
-
-.components-container {
-  margin: 0;
-  position: relative;
-
-}
-
-.dashboard-editor-container {
-  background-color: #e3e3e3;
-  min-height: 100vh;
-  padding: 60px 80px;
-
-  .content_title {
-    font-size: 2.0em;
-    text-align: center;
-    margin: 30px 0;
+@media (min-width: 501px) {
+  .clearfix:before,
+  .clearfix:after {
+    display: table;
+    content: "";
   }
 
-  .auth_content {
-    text-align: center;
-    font-size: 0.65em;
-    color: #aaa;
-    margin-left: 30px;
-
-    time {
-      margin-left: 15px;
-    }
+  .clearfix:after {
+    clear: both
   }
 
-  .left_content {
-    .content_short {
+  .components-container {
+    margin: 0;
+    position: relative;
+
+  }
+
+  .dashboard-editor-container {
+    background-color: #e3e3e3;
+    min-height: 100vh;
+    padding: 60px 80px;
+
+    .content_title {
+      font-size: 2.0em;
       text-align: center;
-      font-size: 1.0em;
-      padding: 5px 0;
+      margin: 30px 0;
     }
 
+    .auth_content {
+      text-align: center;
+      font-size: 0.65em;
+      color: #aaa;
+      margin-left: 30px;
+
+      time {
+        margin-left: 15px;
+      }
+    }
+
+    .left_content {
+      .content_short {
+        text-align: center;
+        font-size: 1.0em;
+        padding: 5px 0;
+      }
+
+    }
+  }
+
+  .pan-info-roles {
+    font-size: 12px;
+    font-weight: 700;
+    color: #333;
+    display: block;
+  }
+
+  .info-container {
+    position: relative;
+    margin-left: 190px;
+    height: 150px;
+    line-height: 200px;
+
+    .display_name {
+      font-size: 48px;
+      line-height: 48px;
+      color: #212121;
+      position: absolute;
+      top: 25px;
+    }
   }
 }
+@media (max-width: 500px) {
+  .clearfix:before,
+  .clearfix:after {
+    display: table;
+    content: "";
+  }
 
-.pan-info-roles {
-  font-size: 12px;
-  font-weight: 700;
-  color: #333;
-  display: block;
-}
+  .clearfix:after {
+    clear: both
+  }
 
-.info-container {
-  position: relative;
-  margin-left: 190px;
-  height: 150px;
-  line-height: 200px;
+  .components-container {
+    margin: 0;
+    position: relative;
 
-  .display_name {
-    font-size: 48px;
-    line-height: 48px;
-    color: #212121;
-    position: absolute;
-    top: 25px;
+  }
+
+  .dashboard-editor-container {
+    background-color: #e3e3e3;
+    min-height: 100vh;
+    padding: 0;
+
+    .content_title {
+      font-size: 2.0em;
+      text-align: center;
+      margin: 30px 0;
+    }
+
+    .auth_content {
+      text-align: center;
+      font-size: 0.65em;
+      color: #aaa;
+      margin-left: 30px;
+
+      time {
+        margin-left: 15px;
+      }
+    }
+
+    .left_content {
+      .content_short {
+        text-align: center;
+        font-size: 1.0em;
+        padding: 5px 0;
+      }
+
+    }
+  }
+
+  .pan-info-roles {
+    font-size: 12px;
+    font-weight: 700;
+    color: #333;
+    display: block;
+  }
+
+  .info-container {
+    position: relative;
+    margin-left: 190px;
+    height: 150px;
+    line-height: 200px;
+
+    .display_name {
+      font-size: 48px;
+      line-height: 48px;
+      color: #212121;
+      position: absolute;
+      top: 25px;
+    }
   }
 }
 </style>
