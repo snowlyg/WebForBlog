@@ -136,17 +136,18 @@
 
 <script>
 'use strict'
-import request from '@/utils/request'
 import language from './utils/language.js'
 import mimes from './utils/mimes.js'
 import data2blob from './utils/data2blob.js'
 import effectRipple from './utils/effectRipple.js'
+import { uploadFile } from '@/api/upload-file'
+
 export default {
   props: {
     // 域，上传文件name，触发事件会带上（如果一个页面多个图片上传控件，可以做区分
     field: {
       type: String,
-      default: 'avatar'
+      default: 'uploadfile'
     },
     // 原名key，类似于id，触发事件会带上（如果一个页面多个图片上传控件，可以做区分
     ki: {
@@ -763,6 +764,7 @@ export default {
         lang,
         imgFormat,
         mime,
+        // eslint-disable-next-line no-unused-vars
         url,
         params,
         field,
@@ -770,11 +772,7 @@ export default {
         createImgUrl
       } = this
       const fmData = new FormData()
-      fmData.append(
-        field,
-        data2blob(createImgUrl, mime),
-        field + '.' + imgFormat
-      )
+      fmData.append(field, data2blob(createImgUrl, mime), field + '.' + imgFormat)
       // 添加其他参数
       if (typeof params === 'object' && params) {
         Object.keys(params).forEach(k => {
@@ -791,23 +789,23 @@ export default {
       this.reset()
       this.loading = 1
       this.setStep(3)
-      request({
-        url,
-        method: 'post',
-        data: fmData
-      })
-        .then(resData => {
+
+      return new Promise((resolve, reject) => {
+        uploadFile(fmData).then(response => {
           this.loading = 2
-          this.$emit('crop-upload-success', resData.data)
-        })
-        .catch(err => {
+          this.$emit('crop-upload-success', response.data)
+          resolve(true)
+        }).catch(err => {
+          console.log(err)
           if (this.value) {
             this.loading = 3
             this.hasError = true
             this.errorMsg = lang.fail
             this.$emit('crop-upload-fail', err, field, ki)
           }
+          reject(false)
         })
+      })
     },
     closeHandler(e) {
       if (this.value && (e.key === 'Escape' || e.keyCode === 27)) {
