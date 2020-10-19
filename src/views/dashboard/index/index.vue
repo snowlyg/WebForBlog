@@ -22,7 +22,7 @@
                 <div class="content_short"> {{ item.content_short }}</div>
                 <div class="auth_content">
                   <span>作者：{{ item.author }} </span>
-                  <time class="time">发布时间：{{ item.display_time | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</time>
+                  <time class="time">发布时间：{{ item.display_at | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</time>
                 </div>
               </div>
               <div class=" clearfix" />

@@ -7,7 +7,7 @@
             <div class="content_title">{{ detail.title }}</div>
             <div class="auth_content">
               <span>作者：{{ detail.author }} </span>
-              <time class="time">发布时间：{{ detail.display_time }}</time>
+              <time class="time">发布时间：{{ detail.display_at }}</time>
             </div>
             <hr>
             <div>
@@ -48,6 +48,7 @@ const defaultDetail = {
   source_uri: '', // 文章外链
   image_uri: '', // 文章图片
   display_time: undefined, // 前台展示时间
+  display_at: undefined, // 前台展示时间
   id: undefined,
   is_original: true,
   comment_disabled: false,
