@@ -206,7 +206,7 @@ export default {
       } else {
         const { code, data } = await addUser(this.user)
         if (code === 200) {
-          this.user = data.data
+          this.user = data
           this.usersList.push(this.user)
         }
       }

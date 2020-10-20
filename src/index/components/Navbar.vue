@@ -6,7 +6,7 @@
     <div class="other_web text-center">
       <p>努力决定一切，不向命运屈服</p>
       <a href="https://github.com/snowlyg" target="_blank"><svg-icon icon-class="github-square" class="github" /></a>
-      <a href="https://learnku.com/blog/about_laravel" target="_blank"><svg-icon icon-class="laravel" class="laravel" /></a>
+      <a href="https://learnku.com/users/16294" target="_blank"><svg-icon icon-class="laravel" class="laravel" /></a>
       <a href="//shang.qq.com/wpa/qunwpa?idkey=cc99ccf86be594e790eacc91193789746af7df4a88e84fe949e61e5c6d63537c" target="_blank"><svg-icon icon-class="qq-square" class="qq" /></a>
     </div>
 
