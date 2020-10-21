@@ -18,6 +18,11 @@
           {{ scope.row.username }}
         </template>
       </el-table-column>
+      <el-table-column align="center" label="用户密码" width="220">
+        <template slot-scope="scope">
+          {{ scope.row.password }}
+        </template>
+      </el-table-column>
       <el-table-column align="header-center" label="描述">
         <template slot-scope="scope">
           {{ scope.row.introduction }}
@@ -39,6 +44,9 @@
         <el-form-item label="名称">
           <el-input v-model="user.username" placeholder="用户名称" />
         </el-form-item>
+        <el-form-item label="密码">
+          <el-input v-model="user.password" placeholder="用户密码" />
+        </el-form-item>
         <el-form-item label="描述">
           <el-input
             v-model="user.introduction"
@@ -47,7 +55,7 @@
             placeholder="用户描述"
           />
         </el-form-item>
-        <el-form-item label="权限">
+        <el-form-item label="角色">
           <el-tree
             ref="tree"
             :check-strictly="checkStrictly"
@@ -76,6 +84,7 @@ const defaultUser = {
   id: 0,
   name: '',
   username: '',
+  password: '',
   introduction: '',
   roles: [],
   role_ids: []
