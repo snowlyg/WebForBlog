@@ -23,6 +23,7 @@
                 <div class="auth_content">
                   <span>作者：{{ item.author }} </span>
                   <time class="time">发布时间：{{ item.display_at | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</time>
+
                 </div>
               </div>
               <div class=" clearfix" />
@@ -86,7 +87,7 @@ export default {
 <style lang="scss" scoped>
 
 @media (max-width: 500px) {
-  .header-search{
+  .header-search {
     margin: 20px 40px;
   }
   .el-card-div {
@@ -176,7 +177,7 @@ export default {
 }
 
 @media (min-width: 501px) {
-  .header-search{
+  .header-search {
     margin: 20px 40px;
   }
 

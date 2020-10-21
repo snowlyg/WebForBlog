@@ -213,25 +213,25 @@ export const asyncRoutes = [
           title: '编辑文章',
           roles: ['admin'] // or you can only set roles in sub nav
         }
+      },
+      {
+        path: '/admin/article/tag',
+        component: () => import('@/views/article/tag'),
+        name: '标签管理',
+        meta: {
+          title: '标签管理',
+          roles: ['admin']
+        }
+      },
+      {
+        path: '/admin/article/type',
+        component: () => import('@/views/article/type'),
+        name: '分类管理',
+        meta: {
+          title: '分类管理',
+          roles: ['admin']
+        }
       }
-      // {
-      //   path: '/admin/article/tag',
-      //   component: () => import('@/views/article/tag'),
-      //   name: '文章标签',
-      //   meta: {
-      //     title: '文章标签',
-      //     roles: ['admin']
-      //   }
-      // },
-      // {
-      //   path: '/admin/article/type',
-      //   component: () => import('@/views/article/type'),
-      //   name: '文章分类',
-      //   meta: {
-      //     title: '文章分类',
-      //     roles: ['admin']
-      //   }
-      // }
     ]
   },
 

@@ -4,7 +4,18 @@ export function searchUser(name) {
   return request({
     url: '/admin/users',
     method: 'get',
-    params: { name }
+    params: {
+      searchStr: 'name:' + name
+    }
+  })
+}
+export function searchType(name) {
+  return request({
+    url: '/admin/types',
+    method: 'get',
+    params: {
+      searchStr: 'name:' + name
+    }
   })
 }
 

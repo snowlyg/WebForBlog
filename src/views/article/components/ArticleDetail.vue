@@ -44,50 +44,98 @@
               <MDinput v-model="postForm.title" :maxlength="100" name="name" required>
                 标题
               </MDinput>
+              <div class="postInfo-container">
+                <el-row style="margin: 40px 0;">
+                  <el-col :span="8">
+                    <el-form-item label-width="60px" label="分类:" class="postInfo-container-item">
+                      <el-select
+                        v-model="postForm.type.name"
+                        :remote-method="getRemoteTypeList"
+                        filterable
+                        default-first-option
+                        remote
+                        placeholder="搜索分类"
+                      >
+                        <el-option
+                          v-for="(item,index) in typeListOptions"
+                          :key="item+index"
+                          :label="item"
+                          :value="item"
+                        />
+                      </el-select>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="12">
+                    <el-form-item label-width="120px" label="标签:" class="postInfo-container-item">
+                      <el-tag
+                        v-for="tag in postForm.tag_names"
+                        :key="tag"
+                        closable
+                        :disable-transitions="false"
+                        @close="handleClose(tag)"
+                      >
+                        {{ tag }}
+                      </el-tag>
+                      <el-input
+                        v-if="inputVisible"
+                        ref="saveTagInput"
+                        v-model="inputValue"
+                        class="input-new-tag"
+                        size="small"
+                        @keyup.enter.native="handleInputConfirm"
+                        @blur="handleInputConfirm"
+                      />
+                      <el-button v-else class="button-new-tag" size="small" @click="showInput">+</el-button>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+                <el-row>
+                  <el-col :span="8">
+                    <el-form-item label-width="60px" label="作者:" class="postInfo-container-item">
+                      <el-select
+                        v-model="postForm.author"
+                        :remote-method="getRemoteUserList"
+                        filterable
+                        default-first-option
+                        remote
+                        placeholder="搜索用户"
+                      >
+                        <el-option
+                          v-for="(item,index) in userListOptions"
+                          :key="item+index"
+                          :label="item"
+                          :value="item"
+                        />
+                      </el-select>
+                    </el-form-item>
+                  </el-col>
+
+                  <el-col :span="10">
+                    <el-form-item label-width="120px" label="发布时间:" class="postInfo-container-item">
+                      <el-date-picker
+                        v-model="displayTime"
+                        type="datetime"
+                        format="yyyy-MM-dd HH:mm:ss"
+                        placeholder="选择日期时间"
+                      />
+                    </el-form-item>
+                  </el-col>
+
+                  <el-col :span="6">
+                    <el-form-item label-width="90px" label="Importance:" class="postInfo-container-item">
+                      <el-rate
+                        v-model="postForm.importance"
+                        :max="3"
+                        :colors="['#99A9BF', '#F7BA2A', '#FF9900']"
+                        :low-threshold="1"
+                        :high-threshold="3"
+                        style="display:inline-block"
+                      />
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </div>
             </el-form-item>
-
-            <div class="postInfo-container">
-              <el-row>
-                <el-col :span="8">
-                  <el-form-item label-width="60px" label="作者:" class="postInfo-container-item">
-                    <el-select
-                      v-model="postForm.author"
-                      :remote-method="getRemoteUserList"
-                      filterable
-                      default-first-option
-                      remote
-                      placeholder="搜索用户"
-                    >
-                      <el-option v-for="(item,index) in userListOptions" :key="item+index" :label="item" :value="item" />
-                    </el-select>
-                  </el-form-item>
-                </el-col>
-
-                <el-col :span="10">
-                  <el-form-item label-width="120px" label="发布时间:" class="postInfo-container-item">
-                    <el-date-picker
-                      v-model="displayTime"
-                      type="datetime"
-                      format="yyyy-MM-dd HH:mm:ss"
-                      placeholder="选择日期时间"
-                    />
-                  </el-form-item>
-                </el-col>
-
-                <el-col :span="6">
-                  <el-form-item label-width="90px" label="Importance:" class="postInfo-container-item">
-                    <el-rate
-                      v-model="postForm.importance"
-                      :max="3"
-                      :colors="['#99A9BF', '#F7BA2A', '#FF9900']"
-                      :low-threshold="1"
-                      :high-threshold="3"
-                      style="display:inline-block"
-                    />
-                  </el-form-item>
-                </el-col>
-              </el-row>
-            </div>
           </el-col>
         </el-row>
 
@@ -140,7 +188,7 @@ import ImageCropper from '@/components/ImageCropper'
 import MarkdownEditor from '@/components/MarkdownEditor'
 import { validURL } from '@/utils/validate'
 import { createArticle, deleteArticle, fetchArticle, updateArticle } from '@/api/article'
-import { searchUser } from '@/api/remote-search'
+import { searchType, searchUser } from '@/api/remote-search'
 import Warning from './Warning'
 import { CommentDropdown, PlatformDropdown, SourceUrlDropdown } from './Dropdown'
 
@@ -155,7 +203,11 @@ const defaultForm = {
   id: undefined,
   is_original: true,
   comment_disabled: false,
-  importance: 0
+  importanc: 0,
+  tag_names: [],
+  type: {
+    name: ''
+  }
 }
 const content = ''
 
@@ -205,6 +257,9 @@ export default {
       }
     }
     return {
+      inputVisible: false,
+      inputValue: '',
+
       imagecropperShow: false,
       imagecropperKey: 0,
 
@@ -212,6 +267,7 @@ export default {
       postForm: Object.assign({}, defaultForm),
       loading: false,
       userListOptions: [],
+      typeListOptions: [],
       rules: {
         image_uri: [{ validator: validateRequire }],
         title: [{ validator: validateRequire }],
@@ -267,6 +323,29 @@ export default {
     this.tempRoute = Object.assign({}, this.$route)
   },
   methods: {
+    handleClose(tag) {
+      this.postForm.tag_names.splice(this.postForm.tag_names.indexOf(tag), 1)
+    },
+
+    showInput() {
+      this.inputVisible = true
+      this.$nextTick(_ => {
+        this.$refs.saveTagInput.$refs.input.focus()
+      })
+    },
+
+    handleInputConfirm() {
+      const inputValue = this.inputValue
+      if (inputValue) {
+        if (this.postForm.tag_names) {
+          this.postForm.tag_names.push(inputValue)
+        } else {
+          this.postForm.tag_names = [inputValue]
+        }
+      }
+      this.inputVisible = false
+      this.inputValue = ''
+    },
     rmImage() {
       this.postForm.image_uri = ''
     },
@@ -392,6 +471,12 @@ export default {
         this.userListOptions = response.data.map(v => v.name)
       })
     },
+    getRemoteTypeList(query) {
+      searchType(query).then(response => {
+        if (!response.data) return
+        this.typeListOptions = response.data.map(v => v.name)
+      })
+    },
     getHtml() {
       this.postForm.content = this.$refs.markdownEditor.getValue()
     },
@@ -415,6 +500,7 @@ export default {
 
   .createPost-main-container {
     padding: 40px 45px 20px 50px;
+
     .image-preview {
       width: 200px;
       height: 200px;
@@ -422,15 +508,18 @@ export default {
       border: 1px dashed #d9d9d9;
       float: left;
       margin-left: 50px;
+
       .image-preview-wrapper {
         position: relative;
         width: 100%;
         height: 100%;
+
         img {
           width: 100%;
           height: 100%;
         }
       }
+
       .image-preview-action {
         position: absolute;
         width: 100%;
@@ -447,16 +536,19 @@ export default {
         cursor: pointer;
         text-align: center;
         line-height: 200px;
+
         .el-icon-delete {
           font-size: 36px;
         }
       }
+
       &:hover {
         .image-preview-action {
           opacity: 1;
         }
       }
     }
+
     .image-app-preview {
       width: 320px;
       height: 180px;
@@ -464,6 +556,7 @@ export default {
       border: 1px dashed #d9d9d9;
       float: left;
       margin-left: 50px;
+
       .app-fake-conver {
         height: 44px;
         position: absolute;
@@ -501,5 +594,23 @@ export default {
     border-radius: 0px;
     border-bottom: 1px solid #bfcbd9;
   }
+}
+
+.el-tag + .el-tag {
+  margin-left: 10px;
+}
+
+.button-new-tag {
+  margin-left: 10px;
+  height: 32px;
+  line-height: 30px;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.input-new-tag {
+  width: 90px;
+  margin-left: 10px;
+  vertical-align: bottom;
 }
 </style>
