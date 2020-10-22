@@ -130,10 +130,10 @@ export default {
   .image {
     width: 90px;
     height: 90px;
-    border-style: none;
+    border:1px solid #eeeeee;
     float: left;
     margin-right: 5px;
-    padding: 0px;
+    padding: 0;
   }
 
   .left_content {
@@ -234,7 +234,7 @@ export default {
 
   .image {
     width: 150px;
-    border-style: none;
+    border:1px solid #eeeeee;
     height: 150px;
     float: left;
     margin-right: 30px;
