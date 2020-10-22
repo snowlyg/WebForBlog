@@ -21,9 +21,9 @@
                 </router-link>
                 <div class="content_short"> {{ item.content_short }}</div>
                 <div class="auth_content">
-                  <span>作者：{{ item.author }} </span>
-                  <time class="time">发布时间：{{ item.display_at | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</time>
-
+                  <svg-icon icon-class="folder" class="svg-icon" />  <span> {{ item.type.name }} </span> /
+                  <svg-icon icon-class="author" class="svg-icon" /> <span>{{ item.author }} </span> /
+                  <svg-icon icon-class="time" class="svg-icon" /> <time class="time">{{ item.display_at | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</time>
                 </div>
               </div>
               <div class=" clearfix" />
@@ -121,9 +121,14 @@ export default {
     .auth_content {
       font-size: 0.45em;
       color: #aaa;
-
+      span{
+        margin-right: 5px;
+      }
       time {
-        margin-left: 5px;
+        margin-left: 0px;
+      }
+      .svg-icon{
+        margin: 0 5px 0 10px;
       }
     }
 
@@ -212,9 +217,15 @@ export default {
     .auth_content {
       font-size: 0.85em;
       color: #aaa;
-
+      span{
+        margin-right: 5px;
+      }
       time {
-        margin-left: 30px;
+        margin-left: 0px;
+      }
+
+      .svg-icon{
+        margin: 0 5px 0 10px;
       }
     }
 

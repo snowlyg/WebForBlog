@@ -6,8 +6,10 @@
           <div style="padding: 14px;">
             <div class="content_title">{{ detail.title }}</div>
             <div class="auth_content">
-              <span>作者：{{ detail.author }} </span>
-              <time class="time">发布时间：{{ detail.display_at }}</time>
+              <svg-icon icon-class="folder" class="svg-icon" />  <span> {{ detail.type.name }} </span> /
+              <svg-icon icon-class="author" class="svg-icon" /> <span>{{ detail.author }} </span> /
+              <svg-icon icon-class="time" class="svg-icon" /> <time class="time">{{ detail.display_at | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</time>
+
             </div>
             <hr>
             <div>
@@ -59,7 +61,10 @@ const defaultDetail = {
   id: undefined,
   is_original: true,
   comment_disabled: false,
-  importance: 0
+  importance: 0,
+  type: {
+    name: ''
+  }
 }
 
 export default {
@@ -154,8 +159,15 @@ export default {
       color: #aaa;
       margin-left: 30px;
 
+      span{
+        margin-right: 5px;
+      }
       time {
-        margin-left: 15px;
+        margin-left: 0;
+      }
+
+      .svg-icon{
+        margin: 0 5px 0 10px;
       }
     }
 
@@ -226,8 +238,15 @@ export default {
       color: #aaa;
       margin-left: 30px;
 
+      span{
+        margin-right: 5px;
+      }
       time {
-        margin-left: 15px;
+        margin-left: 0;
+      }
+
+      .svg-icon{
+        margin: 0 5px 0 10px;
       }
     }
 

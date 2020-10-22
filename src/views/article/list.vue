@@ -21,9 +21,9 @@
         </template>
       </el-table-column>
 
-      <el-table-column width="120px" align="center" label="来源">
+      <el-table-column width="120px" align="center" label="分类">
         <template slot-scope="scope">
-          <span>{{ scope.row.source_uri }}</span>
+          <span>{{ scope.row.type.name }}</span>
         </template>
       </el-table-column>
 
