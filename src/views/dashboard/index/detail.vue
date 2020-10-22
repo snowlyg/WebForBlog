@@ -6,10 +6,16 @@
           <div style="padding: 14px;">
             <div class="content_title">{{ detail.title }}</div>
             <div class="auth_content">
-              <svg-icon icon-class="folder" class="svg-icon" />  <span> {{ detail.type.name }} </span> /
-              <svg-icon icon-class="author" class="svg-icon" /> <span>{{ detail.author }} </span> /
-              <svg-icon icon-class="time" class="svg-icon" /> <time class="time">{{ detail.display_at | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</time>
-
+              <el-tooltip content="文章分类" placement="top"><svg-icon icon-class="folder" class="svg-icon" /></el-tooltip><span> {{ detail.type.name }} </span> /
+              <el-tooltip content="文章作者" placement="top"><svg-icon icon-class="author" class="svg-icon" /></el-tooltip> <span>{{ detail.author }} </span> /
+              <el-tooltip content="阅读量" placement="top">
+                <svg-icon icon-class="eye-filer" class="svg-icon eye-filer" />
+              </el-tooltip><span>{{ detail.read }} </span> /
+              <el-tooltip content="点赞文章" placement="top">
+                <transition name="fade">
+                  <svg-icon v-if="show" icon-class="like" class="svg-icon" @click="likeArticle(detail.id)" />
+                </transition> </el-tooltip><span>{{ detail.like }} </span> /
+              <el-tooltip content="发布时间" placement="top"><svg-icon icon-class="time" class="svg-icon" /></el-tooltip> <time class="time">{{ detail.display_at | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</time>
             </div>
             <hr>
             <div>
@@ -41,7 +47,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { indexDetail } from '@/api/article'
+import { indexDetail, like } from '@/api/article'
 import '@toast-ui/editor/dist/toastui-editor-viewer.css'
 import Viewer from '@toast-ui/editor/dist/toastui-editor-viewer'
 import 'highlight.js/styles/github.css'
@@ -62,6 +68,8 @@ const defaultDetail = {
   is_original: true,
   comment_disabled: false,
   importance: 0,
+  like: 0,
+  read: 0,
   type: {
     name: ''
   },
@@ -73,6 +81,7 @@ export default {
   components: { BackToTop },
   data() {
     return {
+      show: true,
       detail: Object.assign({}, defaultDetail),
       // customizable button style, show/hide critical point, return position
       myBackToTopStyle: {
@@ -91,6 +100,15 @@ export default {
     this.getDetail(id)
   },
   methods: {
+    likeArticle(id) {
+      like(id).then(response => {
+        this.detail = response.data
+        this.show = !this.show
+        setTimeout(() => {
+          this.show = !this.show
+        }, 1)
+      })
+    },
     getDetail(id) {
       this.listLoading = true
       indexDetail(id).then(response => {
@@ -113,7 +131,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
+}
 @media (min-width: 501px) {
   .clearfix:before,
   .clearfix:after {
@@ -160,14 +183,18 @@ export default {
       color: #aaa;
 
       span{
-        margin-right: 5px;
+        margin-right: 8px;
       }
       time {
         margin-left: 0;
       }
 
       .svg-icon{
-        margin: 0 5px 0 10px;
+        margin: 0 3px 0 10px;
+      }
+      .eye-filer{
+        font-size: 14px;
+        padding-top: 4px;
       }
     }
 
@@ -238,14 +265,19 @@ export default {
       color: #aaa;
 
       span{
-        margin-right: 5px;
+        margin-right: 8px;
       }
       time {
         margin-left: 0;
       }
 
       .svg-icon{
-        margin: 0 5px 0 10px;
+        margin: 0 3px 0 10px;
+      }
+
+      .eye-filer{
+        font-size: 14px;
+        padding-top: 4px;
       }
     }
 

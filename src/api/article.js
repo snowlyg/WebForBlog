@@ -1,5 +1,12 @@
 import request from '@/utils/request'
 
+export function like(id) {
+  return request({
+    url: `/article/like/${id}`,
+    method: 'get'
+  })
+}
+
 export function indexList(query) {
   return request({
     url: '/article',
@@ -7,6 +14,7 @@ export function indexList(query) {
     params: query
   })
 }
+
 export function indexDetail(id) {
   return request({
     url: `/article/${id}`,
