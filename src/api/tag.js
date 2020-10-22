@@ -1,5 +1,13 @@
 import request from '@/utils/request'
 
+export function getArticleTags(query) {
+  return request({
+    url: '/tags',
+    method: 'get',
+    params: query
+  })
+}
+
 export function getTags() {
   return request({
     url: '/admin/tags',

@@ -1,5 +1,12 @@
 import request from '@/utils/request'
 
+export function getArticleTypes(query) {
+  return request({
+    url: '/types',
+    method: 'get',
+    params: query
+  })
+}
 export function getTypes() {
   return request({
     url: '/admin/types',

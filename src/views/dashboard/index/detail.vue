@@ -64,7 +64,8 @@ const defaultDetail = {
   importance: 0,
   type: {
     name: ''
-  }
+  },
+  tag_names: []
 }
 
 export default {
@@ -157,7 +158,6 @@ export default {
       text-align: center;
       font-size: 0.65em;
       color: #aaa;
-      margin-left: 30px;
 
       span{
         margin-right: 5px;
@@ -236,7 +236,6 @@ export default {
       text-align: center;
       font-size: 0.65em;
       color: #aaa;
-      margin-left: 30px;
 
       span{
         margin-right: 5px;

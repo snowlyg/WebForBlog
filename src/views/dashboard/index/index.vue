@@ -8,6 +8,11 @@
         @input="handleSearch"
       />
     </div>
+    <div class="header-search text-center">
+      <el-button v-for="(tag) in tags" :span="4" class="text-center tag_btn" style="margin: 5px 5px" @click="handleTagSearch(tag.id)">
+        {{ tag.name }}
+      </el-button>
+    </div>
 
     <div class="dashboard-editor-container">
       <el-row>
@@ -21,9 +26,12 @@
                 </router-link>
                 <div class="content_short"> {{ item.content_short }}</div>
                 <div class="auth_content">
-                  <svg-icon icon-class="folder" class="svg-icon" />  <span> {{ item.type.name }} </span> /
-                  <svg-icon icon-class="author" class="svg-icon" /> <span>{{ item.author }} </span> /
-                  <svg-icon icon-class="time" class="svg-icon" /> <time class="time">{{ item.display_at | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</time>
+                  <svg-icon icon-class="folder" class="svg-icon" />
+                  <span> {{ item.type.name }} </span> /
+                  <svg-icon icon-class="author" class="svg-icon" />
+                  <span>{{ item.author }} </span> /
+                  <svg-icon icon-class="time" class="svg-icon" />
+                  <time class="time">{{ item.display_at | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</time>
                 </div>
               </div>
               <div class=" clearfix" />
@@ -44,6 +52,8 @@
 <script>
 import { mapGetters } from 'vuex'
 import { indexList } from '@/api/article'
+import { getArticleTags } from '@/api/tag'
+import { getArticleTypes } from '@/api/type'
 import SimplePagination from '@/components/SimplePagination'
 
 export default {
@@ -51,10 +61,13 @@ export default {
   components: { SimplePagination },
   data() {
     return {
+      tags: [],
+      types: [],
       aritcles: [],
       total: 0,
       title: '',
       listQuery: {
+        tagId: 0,
         searchStr: '',
         orderBy: 'display_time',
         offset: 1,
@@ -62,7 +75,8 @@ export default {
       }
     }
   },
-  created() { this.getData() },
+  // eslint-disable-next-line no-sequences
+  created() { this.getData(), this.getTypeTag() },
   methods: {
     getData() {
       this.listLoading = true
@@ -72,8 +86,21 @@ export default {
         this.listQuery.limit = response.data.limit
       })
     },
+    getTypeTag() {
+      getArticleTypes({ offset: -1, limit: -1 }).then(response => {
+        this.types = response.data
+      })
+      getArticleTags({ offset: -1, limit: -1 }).then(response => {
+        this.tags = response.data
+      })
+    },
     handleSearch() {
       this.listQuery.searchStr = 'title:' + this.title
+      this.getData()
+    },
+    handleTagSearch(tagId) {
+      console.log('handleTagSearch: ' + tagId)
+      this.listQuery.tagId = tagId
       this.getData()
     }
   },
@@ -89,6 +116,12 @@ export default {
 @media (max-width: 500px) {
   .header-search {
     margin: 20px 40px;
+    .tag_btn{
+      margin: 5px;
+      padding: 5px;
+      font-size: 12px;
+      border-radius: 2px;
+    }
   }
   .el-card-div {
     margin: 5px 0;
@@ -121,13 +154,16 @@ export default {
     .auth_content {
       font-size: 0.45em;
       color: #aaa;
-      span{
+
+      span {
         margin-right: 5px;
       }
+
       time {
         margin-left: 0px;
       }
-      .svg-icon{
+
+      .svg-icon {
         margin: 0 5px 0 10px;
       }
     }
@@ -184,6 +220,12 @@ export default {
 @media (min-width: 501px) {
   .header-search {
     margin: 20px 40px;
+    .tag_btn{
+      margin: 5px;
+      padding: 5px;
+      font-size: 12px;
+      border-radius: 2px;
+    }
   }
 
   .el-card-div {
@@ -217,14 +259,16 @@ export default {
     .auth_content {
       font-size: 0.85em;
       color: #aaa;
-      span{
+
+      span {
         margin-right: 5px;
       }
+
       time {
         margin-left: 0px;
       }
 
-      .svg-icon{
+      .svg-icon {
         margin: 0 5px 0 10px;
       }
     }
