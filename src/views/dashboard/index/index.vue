@@ -17,8 +17,8 @@
     <div class="dashboard-editor-container">
       <el-row>
         <el-col v-for="(item) in aritcles" :key="item.id" class="el-card-div" :span="24">
-          <el-card>
-            <div>
+          <el-card :body-style="{ padding: '10px' }">
+            <div class="article_data">
               <img :src="item.image_uri" alt="" class="image">
               <div class="left_content">
                 <router-link target="_blank" :to="'/detail/'+item.id" class="link-type">
@@ -26,12 +26,12 @@
                 </router-link>
                 <div class="content_short"> {{ item.content_short }}</div>
                 <div class="auth_content">
-                  <svg-icon icon-class="folder" class="svg-icon" />
+                  <svg-icon icon-class="folder" style="margin-left: 0" />
                   <span> {{ item.type.name }} </span> /
-                  <svg-icon icon-class="author" class="svg-icon" />
+                  <svg-icon icon-class="author" />
                   <span>{{ item.author }} </span> /
-                  <svg-icon icon-class="time" class="svg-icon" />
-                  <time class="time">{{ item.display_at | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</time>
+                  <svg-icon icon-class="time" />
+                  <time class="time">{{ item.display_at | parseTime('{y}-{m}-{d}') }}</time>
                 </div>
               </div>
               <div class=" clearfix" />
@@ -128,27 +128,33 @@ export default {
   }
 
   .image {
-    width: 90px;
-    height: 90px;
+    width: 70px;
+    height: 70px;
     border:1px solid #eeeeee;
     float: left;
     margin-right: 5px;
-    padding: 0;
+    padding: 5px;
   }
 
   .left_content {
-    min-height: 95px;
+    height: 70px;
 
     .content_title {
       font-size: 0.85em;
-      margin: 5px 0;
+      margin: 0;
+      padding: 4px 0;
+      height: 50px;
     }
 
     .content_short {
+      display: none;
       font-size: 0.5em;
       color: #666;
       min-height: 40px;
-      padding: 0px 0;
+      padding:  0;
+      overflow: hidden;
+      text-overflow:ellipsis;
+      white-space: nowrap;
     }
 
     .auth_content {
@@ -160,11 +166,12 @@ export default {
       }
 
       time {
-        margin-left: 0px;
+        margin-left: 0;
       }
 
       .svg-icon {
-        margin: 0 5px 0 10px;
+        margin: 0 5px 0 5px;
+        font-size: 10px;
       }
     }
 
@@ -192,6 +199,7 @@ export default {
     background-color: #e3e3e3;
     min-height: 100vh;
     padding: 10px;
+
   }
 
   .pan-info-roles {
@@ -237,8 +245,8 @@ export default {
     border:1px solid #eeeeee;
     height: 150px;
     float: left;
-    margin-right: 30px;
-    padding: 5px;
+    margin-right: 10px;
+    padding: 10px;
   }
 
   .left_content {
@@ -246,13 +254,14 @@ export default {
 
     .content_title {
       font-size: 1.5em;
-      margin: 15px;
+      margin: 0;
+      padding: 10px;
     }
 
     .content_short {
       font-size: 1.0em;
       color: #666;
-      min-height: 70px;
+      min-height: 75px;
       padding: 5px 0;
     }
 
@@ -296,6 +305,9 @@ export default {
     background-color: #e3e3e3;
     min-height: 100vh;
     padding: 35px;
+    .article_data{
+        margin:15px;
+    }
   }
 
   .pan-info-roles {
