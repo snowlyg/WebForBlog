@@ -1,8 +1,15 @@
 import request from '@/utils/request'
 
+export function getConfigByKey(key) {
+  return request({
+    url: `/config/${key}`,
+    method: 'get'
+  })
+}
+
 export function getConfigs() {
   return request({
-    url: '/admin/configs',
+    url: `/admin/configs/`,
     method: 'get'
   })
 }

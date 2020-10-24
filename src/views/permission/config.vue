@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-button type="primary" @click="handleAddPerm">添加权限</el-button>
+    <el-button type="primary" @click="handleAddPerm">添加配置</el-button>
 
     <el-table :data="configList" style="width: 100%;margin-top:30px;" border>
       <el-table-column align="center" label="ID" width="220">
