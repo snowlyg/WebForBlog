@@ -24,7 +24,8 @@ export default {
   methods: {
     async getData() {
       const res = await getConfigByKey('beianhao')
-      if (res.data.value !== '' && res.data.value !== null && res.data.value !== undefined) {
+      if (res.data !== '' && res.data !== null && res.data !== undefined &&
+        res.data.value !== '' && res.data.value !== null && res.data.value !== undefined) {
         this.data = res.data.value
       }
     }
