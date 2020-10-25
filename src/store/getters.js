@@ -1,4 +1,6 @@
 const getters = {
+  page: state => state.page.page,
+  pageSize: state => state.page.pageSize,
   sidebar: state => state.app.sidebar,
   size: state => state.app.size,
   device: state => state.app.device,

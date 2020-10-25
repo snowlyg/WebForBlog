@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import { scrollTo } from '@/utils/scroll-to'
+// import { scrollTo } from '@/utils/scroll-to'
 
 export default {
   name: 'Pagination',
@@ -75,12 +75,18 @@ export default {
   },
   methods: {
     handleSizeChange(val) {
+      this.$store.dispatch('page/setPageSize', val).then(() => {
+        this.$emit('change')
+      })
       this.$emit('pagination', { page: this.currentPage, limit: val })
       if (this.autoScroll) {
         scrollTo(0, 800)
       }
     },
     handleCurrentChange(val) {
+      this.$store.dispatch('page/setPage', val).then(() => {
+        this.$emit('change')
+      })
       this.$emit('pagination', { page: val, limit: this.pageSize })
       if (this.autoScroll) {
         scrollTo(0, 800)

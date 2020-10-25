@@ -1,6 +1,6 @@
 <template>
   <div class="navbar text-center">
-    <div class="text-center"> <span>© 2020-2012 SNOWLYG.COM </span> | <a href="https://beian.miit.gov.cn/#/Integrated/index">{{ data }}</a></div>
+    <div class="text-center"> <span>© 2020 SNOWLYG.COM </span> | <a href="https://beian.miit.gov.cn/#/Integrated/index">{{ data }}</a></div>
   </div>
 </template>
 

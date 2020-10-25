@@ -9,7 +9,13 @@
       />
     </div>
     <div class="header-search text-center">
-      <el-button v-for="(tag) in tags" :span="4" class="text-center tag_btn" style="margin: 5px 5px" @click="handleTagSearch(tag.id)">
+      <el-button
+        v-for="(tag) in tags"
+        :span="4"
+        class="text-center tag_btn"
+        style="margin: 5px 5px"
+        @click="handleTagSearch(tag.id)"
+      >
         {{ tag.name }}
       </el-button>
     </div>
@@ -76,10 +82,15 @@ export default {
     }
   },
   // eslint-disable-next-line no-sequences
-  created() { this.getData(), this.getTypeTag() },
+  created() {
+    this.getData()
+    this.getTypeTag()
+  },
   methods: {
     getData() {
       this.listLoading = true
+      this.listQuery.offset = this.page
+      this.listQuery.limit = this.pageSize
       indexList(this.listQuery).then(response => {
         this.aritcles = response.data.items
         this.total = response.data.total
@@ -106,7 +117,10 @@ export default {
   },
   // eslint-disable-next-line vue/order-in-components
   computed: {
-    ...mapGetters([])
+    ...mapGetters([
+      'page',
+      'pageSize'
+    ])
   }
 }
 </script>
@@ -116,7 +130,8 @@ export default {
 @media (max-width: 500px) {
   .header-search {
     margin: 20px 40px;
-    .tag_btn{
+
+    .tag_btn {
       margin: 5px;
       padding: 5px;
       font-size: 12px;
@@ -130,7 +145,7 @@ export default {
   .image {
     width: 70px;
     height: 70px;
-    border:1px solid #eeeeee;
+    border: 1px solid #eeeeee;
     float: left;
     margin-right: 5px;
     padding: 5px;
@@ -151,9 +166,9 @@ export default {
       font-size: 0.5em;
       color: #666;
       min-height: 40px;
-      padding:  0;
+      padding: 0;
       overflow: hidden;
-      text-overflow:ellipsis;
+      text-overflow: ellipsis;
       white-space: nowrap;
     }
 
@@ -228,7 +243,8 @@ export default {
 @media (min-width: 501px) {
   .header-search {
     margin: 20px 40px;
-    .tag_btn{
+
+    .tag_btn {
       margin: 5px;
       padding: 5px;
       font-size: 12px;
@@ -242,7 +258,7 @@ export default {
 
   .image {
     width: 150px;
-    border:1px solid #eeeeee;
+    border: 1px solid #eeeeee;
     height: 150px;
     float: left;
     margin-right: 10px;
@@ -305,8 +321,9 @@ export default {
     background-color: #e3e3e3;
     min-height: 100vh;
     padding: 35px;
-    .article_data{
-        margin:15px;
+
+    .article_data {
+      margin: 15px;
     }
   }
 
