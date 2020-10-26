@@ -149,7 +149,7 @@ export default {
   }
 
   .components-container {
-    margin: 0;
+    margin: 56px 0 0 0;
     position: relative;
 
   }
@@ -181,6 +181,7 @@ export default {
       text-align: center;
       font-size: 0.65em;
       color: #aaa;
+      line-height: normal;
 
       span{
         margin-right: 8px;
@@ -243,7 +244,7 @@ export default {
   }
 
   .components-container {
-    margin: 0;
+    margin: 56px 0 0 0;
     position: relative;
 
   }
@@ -259,10 +260,23 @@ export default {
       margin: 30px 0;
     }
 
+    .tag {
+      font-size: 14px;
+      margin-right:3px;
+    }
+
+    .tag_btn{
+      padding: 2px;
+      margin: 0 3px;
+      font-size: 9px;
+      line-height: 22px;
+    }
+
     .auth_content {
       text-align: center;
       font-size: 0.65em;
       color: #aaa;
+      line-height: normal;
 
       span{
         margin-right: 8px;

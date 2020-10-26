@@ -68,7 +68,6 @@ export default {
   data() {
     return {
       tags: [],
-      types: [],
       aritcles: [],
       total: 0,
       title: '',
@@ -99,7 +98,9 @@ export default {
     },
     getTypeTag() {
       getArticleTypes({ offset: -1, limit: -1 }).then(response => {
-        this.types = response.data
+        this.$store.dispatch('type/setTypes', response.data).then(() => {
+          this.$emit('change')
+        })
       })
       getArticleTags({ offset: -1, limit: -1 }).then(response => {
         this.tags = response.data
@@ -203,7 +204,7 @@ export default {
   }
 
   .components-container {
-    margin: 10px 0;
+    margin:56px 0 0 0;
     position: relative;
     //height: 100vh;
 
@@ -311,7 +312,7 @@ export default {
   }
 
   .components-container {
-    margin: 0;
+    margin-top: 46px;
     position: relative;
     //height: 100vh;
 

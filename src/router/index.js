@@ -231,6 +231,24 @@ export const asyncRoutes = [
           title: '分类管理',
           roles: ['admin']
         }
+      },
+      {
+        path: '/admin/article/doc',
+        component: () => import('@/views/article/doc'),
+        name: '文档管理',
+        meta: {
+          title: '文档管理',
+          roles: ['admin']
+        }
+      },
+      {
+        path: '/admin/article/chapter',
+        component: () => import('@/views/article/chapter'),
+        name: '章节管理',
+        meta: {
+          title: '章节管理',
+          roles: ['admin']
+        }
       }
     ]
   },

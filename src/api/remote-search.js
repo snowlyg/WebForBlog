@@ -9,15 +9,6 @@ export function searchUser(name) {
     }
   })
 }
-export function searchType(name) {
-  return request({
-    url: '/admin/types',
-    method: 'get',
-    params: {
-      searchStr: 'name:' + name
-    }
-  })
-}
 
 export function transactionList(query) {
   return request({

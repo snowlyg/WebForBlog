@@ -1,4 +1,5 @@
 const getters = {
+  types: state => state.type.types,
   page: state => state.page.page,
   pageSize: state => state.page.pageSize,
   sidebar: state => state.app.sidebar,
