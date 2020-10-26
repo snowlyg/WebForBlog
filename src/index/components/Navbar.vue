@@ -1,22 +1,13 @@
 <template>
   <div class="navbar">
-    <div class="line" />
-    <el-menu
-      :default-active="activeIndex"
-      class="el-menu-demo"
-      mode="horizontal"
-      background-color="#e3e3e3"
-      text-color="#333"
-      active-text-color="#ffd04b"
-      @select="handleSelect"
-    >
+    <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
       <el-submenu index="1">
         <template slot="title">技术文章</template>
-        <el-menu-item v-for="(item) in types" index="item.id">{{ item.name }}</el-menu-item>
+        <el-menu-item v-for="(item) in types" :index="item.id.toString()">{{ item.name }}</el-menu-item>
       </el-submenu>
       <el-submenu index="2">
         <template slot="title">文档翻译</template>
-        <el-menu-item v-for="(item) in types" index="item.id">{{ item.name }}</el-menu-item>
+        <el-menu-item v-for="(item) in docs" :index="item.id.toString()">{{ item.name }}</el-menu-item>
       </el-submenu>
     </el-menu>
     <div class="text-center">
@@ -35,27 +26,42 @@
 <script>
 import { mapGetters } from 'vuex'
 import PanThumb from '@/components/PanThumb'
+import { getArticleDocs } from '@/api/doc'
 
 export default {
   components: { PanThumb },
   data() {
     return {
-      types: [],
+      docs: [],
       activeIndex: '1'
     }
   },
   created() {
-    this.getTypes()
+    this.getDocs()
   },
   computed: {
-    ...mapGetters(['device'])
+    ...mapGetters([
+      'device',
+      'types'
+    ])
   },
   methods: {
     handleSelect(key, keyPath) {
-      console.log(key, keyPath)
+      if (keyPath[0] === '1') {
+        this.$store.dispatch('type/setTypeId', key).then(() => {
+          this.$emit('change')
+        })
+      } else if (keyPath[0] === '2') {
+        const newpage = this.$router.resolve({
+          path: '/doc/' + key
+        })
+        window.open(newpage.href, '_blank')
+      }
     },
-    getTypes() {
-      this.types = this.$store.getters.types
+    getDocs() {
+      getArticleDocs({ offset: -1, limit: -1 }).then(response => {
+        this.docs = response.data
+      })
     }
   }
 }

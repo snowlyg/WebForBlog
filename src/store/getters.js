@@ -1,5 +1,6 @@
 const getters = {
   types: state => state.type.types,
+  type_id: state => state.type.type_id,
   page: state => state.page.page,
   pageSize: state => state.page.pageSize,
   sidebar: state => state.app.sidebar,

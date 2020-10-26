@@ -1,17 +1,24 @@
 
 const state = {
-  types: []
+  types: [],
+  type_id: 0
 }
 
 const mutations = {
-  SET_TYPES: (state, types) => {
-    state.types = types
+  SET_TYPES: (state, value) => {
+    state.types = value
+  },
+  SET_TYPE_ID: (state, value) => {
+    state.type_id = value
   }
 }
 
 const actions = {
-  setTypes({ commit }, types) {
-    commit('SET_TYPES', types)
+  setTypes({ commit }, value) {
+    commit('SET_TYPES', value)
+  },
+  setTypeId({ commit }, value) {
+    commit('SET_TYPE_ID', value)
   }
 }
 

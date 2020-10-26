@@ -73,6 +73,7 @@ export default {
       title: '',
       listQuery: {
         tagId: 0,
+        typeId: 0,
         searchStr: '',
         orderBy: 'display_time',
         offset: 1,
@@ -111,7 +112,6 @@ export default {
       this.getData()
     },
     handleTagSearch(tagId) {
-      console.log('handleTagSearch: ' + tagId)
       this.listQuery.tagId = tagId
       this.getData()
     }
@@ -121,7 +121,17 @@ export default {
     ...mapGetters([
       'page',
       'pageSize'
-    ])
+    ]),
+    typeId() {
+      return this.$store.getters.type_id
+    }
+  },
+  // eslint-disable-next-line vue/order-in-components
+  watch: {
+    typeId(val, oldVal) {
+      this.listQuery.typeId = val
+      this.getData()
+    }
   }
 }
 </script>
@@ -204,7 +214,7 @@ export default {
   }
 
   .components-container {
-    margin:56px 0 0 0;
+    margin: 56px 0 0 0;
     position: relative;
     //height: 100vh;
 
@@ -312,7 +322,7 @@ export default {
   }
 
   .components-container {
-    margin:46px 0 0 0;
+    margin: 46px 0 0 0;
     position: relative;
     //height: 100vh;
 
