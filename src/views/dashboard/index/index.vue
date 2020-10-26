@@ -312,7 +312,7 @@ export default {
   }
 
   .components-container {
-    margin-top: 46px;
+    margin:46px 0 0 0;
     position: relative;
     //height: 100vh;
 
