@@ -69,6 +69,10 @@ export const constantRoutes = [
         path: '/doc/:id(\\d+)',
         component: () => import('@/views/dashboard/doc/index'),
         hidden: true
+      }, {
+        path: '/chapter/:id(\\d+)',
+        component: () => import('@/views/dashboard/doc/detail'),
+        hidden: true
       }
     ]
   },

@@ -7,6 +7,16 @@ export function getArticleDocs(query) {
     params: query
   })
 }
+export function getArticleDoc(id) {
+  return request({
+    url: `/docs/${id}`,
+    method: 'get',
+    params: {
+      relation: 'Chapters'
+    }
+  })
+}
+
 export function getDocs() {
   return request({
     url: '/admin/docs',

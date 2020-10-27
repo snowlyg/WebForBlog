@@ -39,6 +39,7 @@ export default {
   created() {
     this.getDocs()
   },
+  // eslint-disable-next-line vue/order-in-components
   computed: {
     ...mapGetters([
       'device',
