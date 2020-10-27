@@ -55,7 +55,7 @@ const defaultChapter = {
   id: 0,
   doc: {
     id: 0,
-    name: ''
+    name: '请选择文档'
   },
   name: ''
 }
@@ -65,7 +65,10 @@ export default {
     return {
       chapter: Object.assign({}, defaultChapter),
       chaptersList: [],
-      docs: [],
+      docs: [{
+        id: 0,
+        name: '请选择文档'
+      }],
       dialogVisible: false,
       dialogChapter: 'new',
       checkStrictly: false,
@@ -88,7 +91,7 @@ export default {
     },
     async getDocs() {
       const res = await getDocs()
-      this.docs = res.data
+      this.docs = this.docs.concat(res.data)
     },
     handleAddChapter() {
       this.chapter = Object.assign({}, defaultChapter)
