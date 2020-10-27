@@ -100,6 +100,8 @@ export default {
       this.listLoading = true
       this.listQuery.offset = this.page
       this.listQuery.limit = this.pageSize
+      console.log(this.$store.getters.pageSize)
+      console.log(this.$store.getters.page)
       indexList(this.listQuery).then(response => {
         this.aritcles = response.data.items
         this.total = response.data.total

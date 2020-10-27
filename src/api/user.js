@@ -8,6 +8,13 @@ export function login(data) {
   })
 }
 
+export function expire() {
+  return request({
+    url: '/admin/expire',
+    method: 'post'
+  })
+}
+
 export function getInfo() {
   return request({
     url: '/admin/profile',

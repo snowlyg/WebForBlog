@@ -53,6 +53,7 @@ import ErrorLog from '@/components/ErrorLog'
 import Screenfull from '@/components/Screenfull'
 import SizeSelect from '@/components/SizeSelect'
 import Search from '@/components/HeaderSearch'
+import { expire } from '@/api/user'
 
 export default {
   components: {
@@ -70,7 +71,19 @@ export default {
       'device'
     ])
   },
+  watch: {
+    $route() {
+      this.expire()
+    }
+  },
   methods: {
+    expire() {
+      expire(this.$store.getters.token).then(response => {
+        if (response.code !== 200) {
+          this.logout()
+        }
+      })
+    },
     toggleSideBar() {
       this.$store.dispatch('app/toggleSideBar')
     },
