@@ -239,19 +239,63 @@ export const asyncRoutes = [
           title: '分类管理',
           roles: ['admin']
         }
+      }
+    ]
+  },
+  {
+    path: '/admin/doc',
+    component: Layout,
+    redirect: '/admin/doc/index',
+    alwaysShow: true, // will always show the root menu
+    name: '文档管理',
+    meta: {
+      title: '文档管理',
+      icon: 'documentation',
+      roles: ['admin', 'editor'] // you can set roles in root nav
+    },
+    children: [
+      {
+        path: '/admin/doc/create',
+        component: () => import('@/views/doc/create'),
+        name: '创建文档',
+        meta: {
+          title: '创建文档',
+          roles: ['admin'], // or you can only set roles in sub nav
+          icon: 'edit'
+        }
       },
       {
-        path: '/admin/article/doc',
-        component: () => import('@/views/article/doc'),
-        name: '文档管理',
+        path: '/admin/doc/index',
+        component: () => import('@/views/doc/list'),
+        name: '文档列表',
         meta: {
-          title: '文档管理',
+          title: '文档列表',
+          roles: ['admin'], // or you can only set roles in sub nav
+          icon: 'list'
+        }
+      },
+      {
+        path: '/admin/doc/edit/:id(\\d+)',
+        component: () => import('@/views/doc/edit'),
+        name: '编辑文档',
+        hidden: true,
+        meta: {
+          title: '编辑文档',
+          roles: ['admin'] // or you can only set roles in sub nav
+        }
+      },
+      {
+        path: '/admin/doc/doc',
+        component: () => import('@/views/doc/doc'),
+        name: '文档名称',
+        meta: {
+          title: '文档名称',
           roles: ['admin']
         }
       },
       {
-        path: '/admin/article/chapter',
-        component: () => import('@/views/article/chapter'),
+        path: '/admin/doc/chapter',
+        component: () => import('@/views/doc/chapter'),
         name: '章节管理',
         meta: {
           title: '章节管理',

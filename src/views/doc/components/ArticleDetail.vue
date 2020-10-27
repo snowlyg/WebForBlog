@@ -47,14 +47,15 @@
               <div class="postInfo-container">
                 <el-row style="margin: 40px 0;">
                   <el-col :span="12">
-                    <el-form-item label-width="60px" label="分类:" class="postInfo-container-item">
+                    <el-form-item label-width="60px" label="文档:" class="postInfo-container-item">
                       <el-select
-                        v-model="postForm.type.id"
+                        v-model="postForm.chapter.doc.id"
                         filterable
-                        placeholder="搜索分类"
+                        placeholder="搜索文档"
+                        @change="getChapterList"
                       >
                         <el-option
-                          v-for="(item) in typeListOptions"
+                          v-for="(item) in docListOptions"
                           :key="item.id"
                           :label="item.name"
                           :value="item.id"
@@ -63,27 +64,19 @@
                     </el-form-item>
                   </el-col>
                   <el-col :span="12">
-                    <el-form-item label-width="60px" label="标签:" class="postInfo-container-item">
-                      <el-tag
-                        v-for="tag in postForm.tag_names"
-                        :key="tag"
-                        closable
-                        :disable-transitions="false"
-                        @close="handleClose(tag)"
+                    <el-form-item label-width="60px" label="章节:" class="postInfo-container-item">
+                      <el-select
+                        v-model="postForm.chapter.id"
+                        filterable
+                        placeholder="搜索章节"
                       >
-                        {{ tag }}
-                      </el-tag>
-                      <el-input
-                        v-if="inputVisible"
-                        ref="saveTagInput"
-                        v-model="inputValue"
-                        class="input-new-tag"
-                        size="small"
-                        @keyup.enter.native="handleInputConfirm"
-                        @blur="handleInputConfirm"
-                      />
-                      <el-button v-else class="button-new-tag" style="margin: 0" size="small" @click="showInput">+
-                      </el-button>
+                        <el-option
+                          v-for="(item) in chapterListOptions"
+                          :key="item.id"
+                          :label="item.name"
+                          :value="item.id"
+                        />
+                      </el-select>
                     </el-form-item>
                   </el-col>
                 </el-row>
@@ -186,7 +179,8 @@ import MarkdownEditor from '@/components/MarkdownEditor'
 import { validURL } from '@/utils/validate'
 import { createArticle, deleteArticle, fetchArticle, updateArticle } from '@/api/article'
 import { searchUser } from '@/api/remote-search'
-import { getTypes } from '@/api/type'
+import { getChapters } from '@/api/chapter'
+import { getDocs } from '@/api/doc'
 import Warning from './Warning'
 import { CommentDropdown, PlatformDropdown, SourceUrlDropdown } from './Dropdown'
 
@@ -202,10 +196,13 @@ const defaultForm = {
   is_original: true,
   comment_disabled: false,
   importanc: 0,
-  tag_names: [],
-  type: {
+  chapter: {
     id: 0,
-    name: '请选择分类'
+    name: '请选择章节',
+    doc: {
+      id: 0,
+      name: '请选择文档'
+    }
   }
 }
 const content = ''
@@ -266,7 +263,8 @@ export default {
       postForm: Object.assign({}, defaultForm),
       loading: false,
       userListOptions: [],
-      typeListOptions: [{ id: 0, name: '请选择分类' }],
+      chapterListOptions: [{ id: 0, name: '请选择章节' }],
+      docListOptions: [{ id: 0, name: '请选择文档' }],
       rules:
         {
           image_uri: [{ validator: validateRequire }],
@@ -319,7 +317,8 @@ export default {
       const id = this.$route.params && this.$route.params.id
       this.fetchData(id)
     }
-    this.getRemoteTypeList()
+    this.getRemoteChapterList()
+    this.getRemoteDocList()
 
     // Why need to make a copy of this.$route here?
     // Because if you enter this page and quickly switch tag, may be in the execution of the setTagsViewTitle function, this.$route is no longer pointing to the current page
@@ -327,29 +326,6 @@ export default {
     this.tempRoute = Object.assign({}, this.$route)
   },
   methods: {
-    handleClose(tag) {
-      this.postForm.tag_names.splice(this.postForm.tag_names.indexOf(tag), 1)
-    },
-
-    showInput() {
-      this.inputVisible = true
-      this.$nextTick(_ => {
-        this.$refs.saveTagInput.$refs.input.focus()
-      })
-    },
-
-    handleInputConfirm() {
-      const inputValue = this.inputValue
-      if (inputValue) {
-        if (this.postForm.tag_names) {
-          this.postForm.tag_names.push(inputValue)
-        } else {
-          this.postForm.tag_names = [inputValue]
-        }
-      }
-      this.inputVisible = false
-      this.inputValue = ''
-    },
     rmImage() {
       this.postForm.image_uri = ''
     },
@@ -479,10 +455,22 @@ export default {
         this.userListOptions = response.data.map(v => v.name)
       })
     },
-    getRemoteTypeList() {
-      getTypes().then(response => {
+    getRemoteChapterList() {
+      getChapters(0).then(response => {
         if (!response.data) return
-        this.typeListOptions = this.typeListOptions.concat(response.data)
+        this.chapterListOptions = this.chapterListOptions.concat(response.data)
+      })
+    },
+    getChapterList() {
+      getChapters(this.postForm.chapter.doc.id).then(response => {
+        if (!response.data) return
+        this.chapterListOptions = [{ id: 0, name: '请选择章节' }].concat(response.data)
+      })
+    },
+    getRemoteDocList() {
+      getDocs().then(response => {
+        if (!response.data) return
+        this.docListOptions = this.docListOptions.concat(response.data)
       })
     },
     getHtml() {
