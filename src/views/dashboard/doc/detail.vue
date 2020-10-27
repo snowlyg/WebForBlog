@@ -47,7 +47,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { indexDetail, like } from '@/api/article'
+import { getArticleByChapterId, like } from '@/api/article'
 import '@toast-ui/editor/dist/toastui-editor-viewer.css'
 import Viewer from '@toast-ui/editor/dist/toastui-editor-viewer'
 import 'highlight.js/styles/github.css'
@@ -73,10 +73,24 @@ const defaultDetail = {
   type: {
     name: ''
   },
+  chapter: {
+    name: '',
+    doc: {
+      name: ''
+    }
+  },
   tag_names: []
 }
 
 export default {
+  metaInfo() {
+    return {
+      title: `${this.detail.title} -${this.detail.chapter.name}-${this.detail.chapter.doc.name}`,
+      bodyAttrs: {
+        class: 'child-component'
+      }
+    }
+  },
   name: 'DashboardEditor',
   components: { BackToTop },
   data() {
@@ -111,7 +125,7 @@ export default {
     },
     getDetail(id) {
       this.listLoading = true
-      indexDetail(id).then(response => {
+      getArticleByChapterId(id).then(response => {
         this.detail = response.data
 
         new Viewer({

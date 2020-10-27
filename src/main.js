@@ -20,6 +20,13 @@ import './utils/error-log' // error log
 
 import * as filters from './filters' // global filters
 
+import VueMeta from 'vue-meta'
+
+Vue.use(VueMeta, {
+  // optional pluginOptions
+  refreshOnceOnNavigation: true
+})
+
 /**
  * If you don't want to use mock-server
  * you want to use MockJs for mock api

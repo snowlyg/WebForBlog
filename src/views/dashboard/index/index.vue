@@ -63,6 +63,15 @@ import { getArticleTypes } from '@/api/type'
 import SimplePagination from '@/components/SimplePagination'
 
 export default {
+
+  metaInfo() {
+    return {
+      title: `生活中的难过`,
+      bodyAttrs: {
+        class: 'child-component'
+      }
+    }
+  },
   name: 'DashboardEditor',
   components: { SimplePagination },
   data() {

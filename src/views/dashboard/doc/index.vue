@@ -18,6 +18,14 @@ import { mapGetters } from 'vuex'
 import { getArticleDoc } from '@/api/doc'
 
 export default {
+  metaInfo() {
+    return {
+      title: `${this.doc.name} - 翻译文档`,
+      bodyAttrs: {
+        class: 'child-component'
+      }
+    }
+  },
   name: 'DashboardEditor',
   components: {},
   data() {

@@ -77,6 +77,14 @@ const defaultDetail = {
 }
 
 export default {
+  metaInfo() {
+    return {
+      title: `${this.detail.title} - ${this.detail.type.name}`,
+      bodyAttrs: {
+        class: 'child-component'
+      }
+    }
+  },
   name: 'DashboardEditor',
   components: { BackToTop },
   data() {
