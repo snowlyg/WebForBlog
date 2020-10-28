@@ -72,6 +72,7 @@
                         :remote-method="getRemoteUserList"
                         filterable
                         remote
+                        required
                         placeholder="搜索用户"
                       >
                         <el-option
@@ -329,6 +330,14 @@ export default {
       document.title = `${title}`
     },
     createOrUpdateArticle() {
+      if (this.postForm.display_time === '') {
+        this.$notify({
+          message: '发布时间不能为空',
+          type: 'error'
+        })
+        return
+      }
+
       if (this.isEdit) {
         // eslint-disable-next-line no-undef
         updateChapter(this.postForm, this.postForm.id).then(response => {

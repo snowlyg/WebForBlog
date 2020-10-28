@@ -25,7 +25,7 @@ export function addChapter(data) {
   })
 }
 
-export function updateChapter(id, data) {
+export function updateChapter(data, id) {
   return request({
     url: `/admin/chapters/${id}`,
     method: 'put',

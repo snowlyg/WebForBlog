@@ -51,6 +51,7 @@
                       <el-select
                         v-model="postForm.type.id"
                         filterable
+                        required
                         placeholder="搜索分类"
                       >
                         <el-option
@@ -95,6 +96,7 @@
                         :remote-method="getRemoteUserList"
                         filterable
                         remote
+                        required
                         placeholder="搜索用户"
                       >
                         <el-option
@@ -376,9 +378,12 @@ export default {
       document.title = `${title}`
     },
     createOrUpdateArticle() {
-      this.postForm.chapter.doc = null
-      if (this.postForm.chapter.name === '') {
-        this.postForm.chapter.name = '请选择章节名称'
+      if (this.postForm.display_time === '') {
+        this.$notify({
+          message: '发布时间不能为空',
+          type: 'error'
+        })
+        return
       }
       if (this.isEdit) {
         // eslint-disable-next-line no-undef

@@ -6,7 +6,7 @@
       </div>
       <div v-for="element in doc.chapters" :key="element.id" class="board-item">
         <router-link target="_blank" :to="'/chapter/'+element.id" class="link-type">
-          {{ element.name }}
+          {{ element.title }}
         </router-link>
       </div>
     </div>
