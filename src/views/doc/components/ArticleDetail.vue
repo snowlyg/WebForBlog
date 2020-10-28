@@ -46,32 +46,16 @@
               </MDinput>
               <div class="postInfo-container">
                 <el-row style="margin: 40px 0;">
-                  <el-col :span="12">
+                  <el-col :span="24">
                     <el-form-item label-width="60px" label="文档:" class="postInfo-container-item">
                       <el-select
-                        v-model="postForm.chapter.doc.id"
+                        v-model="postForm.doc.id"
+                        style="width: 1200px"
                         filterable
                         placeholder="搜索文档"
-                        @change="getChapterList"
                       >
                         <el-option
                           v-for="(item) in docListOptions"
-                          :key="item.id"
-                          :label="item.name"
-                          :value="item.id"
-                        />
-                      </el-select>
-                    </el-form-item>
-                  </el-col>
-                  <el-col :span="12">
-                    <el-form-item label-width="60px" label="章节:" class="postInfo-container-item">
-                      <el-select
-                        v-model="postForm.chapter.id"
-                        filterable
-                        placeholder="搜索章节"
-                      >
-                        <el-option
-                          v-for="(item) in chapterListOptions"
                           :key="item.id"
                           :label="item.name"
                           :value="item.id"
@@ -177,10 +161,9 @@ import Sticky from '@/components/Sticky' // 粘性header组件
 import ImageCropper from '@/components/ImageCropper'
 import MarkdownEditor from '@/components/MarkdownEditor'
 import { validURL } from '@/utils/validate'
-import { createArticle, deleteArticle, fetchArticle, updateArticle } from '@/api/article'
 import { searchUser } from '@/api/remote-search'
-import { getChapters } from '@/api/chapter'
 import { getDocs } from '@/api/doc'
+import { addChapter, deleteChapter, fetchChapter, updateChapter } from '@/api/chapter'
 import Warning from './Warning'
 import { CommentDropdown, PlatformDropdown, SourceUrlDropdown } from './Dropdown'
 
@@ -196,13 +179,9 @@ const defaultForm = {
   is_original: true,
   comment_disabled: false,
   importanc: 0,
-  chapter: {
+  doc: {
     id: 0,
-    name: '请选择章节',
-    doc: {
-      id: 0,
-      name: '请选择文档'
-    }
+    name: '请选择文档'
   }
 }
 const content = ''
@@ -263,7 +242,6 @@ export default {
       postForm: Object.assign({}, defaultForm),
       loading: false,
       userListOptions: [],
-      chapterListOptions: [{ id: 0, name: '请选择章节' }],
       docListOptions: [{ id: 0, name: '请选择文档' }],
       rules:
         {
@@ -317,7 +295,6 @@ export default {
       const id = this.$route.params && this.$route.params.id
       this.fetchData(id)
     }
-    this.getRemoteChapterList()
     this.getRemoteDocList()
 
     // Why need to make a copy of this.$route here?
@@ -330,7 +307,7 @@ export default {
       this.postForm.image_uri = ''
     },
     fetchData(id) {
-      fetchArticle(id).then(response => {
+      fetchChapter(id).then(response => {
         this.postForm = response.data
         this.content = this.postForm.content
         if (this.isEdit) {
@@ -352,13 +329,9 @@ export default {
       document.title = `${title}`
     },
     createOrUpdateArticle() {
-      this.postForm.chapter.doc = null
-      if (this.postForm.chapter.name === '') {
-        this.postForm.chapter.name = '请选择章节名称'
-      }
       if (this.isEdit) {
         // eslint-disable-next-line no-undef
-        updateArticle(this.postForm, this.postForm.id).then(response => {
+        updateChapter(this.postForm, this.postForm.id).then(response => {
           if (response.code === 200) {
             this.$notify({
               title: '成功',
@@ -366,7 +339,7 @@ export default {
               type: 'success',
               duration: 2000
             })
-            this.$router.push('/admin/article/index')
+            this.$router.push('/admin/doc/index')
           } else {
             this.$notify({
               message: response.message,
@@ -377,7 +350,7 @@ export default {
           console.log(err)
         })
       } else {
-        createArticle(this.postForm).then(response => {
+        addChapter(this.postForm).then(response => {
           if (response.code === 200) {
             this.$notify({
               title: '成功',
@@ -385,7 +358,7 @@ export default {
               type: 'success',
               duration: 2000
             })
-            this.$router.push('/admin/article/index')
+            this.$router.push('/admin/doc/index')
           } else {
             this.$notify({
               message: response.message,
@@ -429,7 +402,7 @@ export default {
     deleteForm() {
       this.loading = true
       // eslint-disable-next-line no-undef
-      deleteArticle(this.postForm.id).then(response => {
+      deleteChapter(this.postForm.id).then(response => {
         if (response.code === 200) {
           this.$notify({
             title: '成功',
@@ -437,7 +410,7 @@ export default {
             type: 'success',
             duration: 2000
           })
-          this.$router.push('/admin/article/index')
+          this.$router.push('/admin/doc/index')
         } else {
           this.$notify({
             message: response.message,
@@ -455,22 +428,10 @@ export default {
         this.userListOptions = response.data.map(v => v.name)
       })
     },
-    getRemoteChapterList() {
-      getChapters(0).then(response => {
-        if (!response.data) return
-        this.chapterListOptions = this.chapterListOptions.concat(response.data)
-      })
-    },
-    getChapterList() {
-      getChapters(this.postForm.chapter.doc.id).then(response => {
-        if (!response.data) return
-        this.chapterListOptions = [{ id: 0, name: '请选择章节' }].concat(response.data)
-      })
-    },
     getRemoteDocList() {
       getDocs().then(response => {
         if (!response.data) return
-        this.docListOptions = this.docListOptions.concat(response.data)
+        this.docListOptions = this.docListOptions.concat(response.data.items)
       })
     },
     getHtml() {

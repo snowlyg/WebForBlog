@@ -67,7 +67,7 @@ export default {
   methods: {
     async getDocs() {
       const res = await getDocs()
-      this.docsList = res.data
+      this.docsList = res.data.items
     },
     handleAddDoc() {
       this.doc = Object.assign({}, defaultDoc)

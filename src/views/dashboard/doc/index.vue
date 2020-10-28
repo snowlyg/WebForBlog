@@ -15,7 +15,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { getArticleDoc } from '@/api/doc'
+import { getPublishedDoc } from '@/api/doc'
 
 export default {
   metaInfo() {
@@ -45,7 +45,7 @@ export default {
   methods: {
     getDetail(id) {
       this.listLoading = true
-      getArticleDoc(id).then(response => {
+      getPublishedDoc(id).then(response => {
         this.doc = response.data
       })
     }

@@ -1,10 +1,9 @@
 import request from '@/utils/request'
 
-export function getArticleChapters(query) {
+export function fetchChapter(id) {
   return request({
-    url: '/chapters',
-    method: 'get',
-    params: query
+    url: `/admin/chapters/${id}`,
+    method: 'get'
   })
 }
 

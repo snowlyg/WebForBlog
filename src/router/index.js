@@ -250,7 +250,7 @@ export const asyncRoutes = [
     name: '文档管理',
     meta: {
       title: '文档管理',
-      icon: 'documentation',
+      icon: 'doc',
       roles: ['admin', 'editor'] // you can set roles in root nav
     },
     children: [
@@ -290,15 +290,6 @@ export const asyncRoutes = [
         name: '文档名称',
         meta: {
           title: '文档名称',
-          roles: ['admin']
-        }
-      },
-      {
-        path: '/admin/doc/chapter',
-        component: () => import('@/views/doc/chapter'),
-        name: '章节管理',
-        meta: {
-          title: '章节管理',
           roles: ['admin']
         }
       }

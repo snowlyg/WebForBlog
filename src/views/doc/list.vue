@@ -8,7 +8,7 @@
       </el-table-column>
       <el-table-column min-width="300px" label="标题">
         <template slot-scope="{row}">
-          <router-link :to="'/admin/article/edit/'+row.id" class="link-type">
+          <router-link :to="'/admin/doc/edit/'+row.id" class="link-type">
             <span>{{ row.title }}</span>
           </router-link>
         </template>
@@ -16,11 +16,6 @@
       <el-table-column width="120px" align="center" label="作者">
         <template slot-scope="scope">
           <span>{{ scope.row.author }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column width="100px" align="center" label="分类">
-        <template slot-scope="scope">
-          <span>{{ scope.row.type.name }}</span>
         </template>
       </el-table-column>
       <el-table-column width="70px" align="center" label="阅读量">
@@ -50,7 +45,7 @@
       </el-table-column>
       <el-table-column align="center" label="操作" width="240">
         <template slot-scope="scope">
-          <router-link :to="'/admin/article/edit/'+scope.row.id">
+          <router-link :to="'/admin/doc/edit/'+scope.row.id">
             <el-button type="primary" size="small" icon="el-icon-edit">
               编辑
             </el-button>
@@ -70,7 +65,7 @@
 </template>
 
 <script>
-import { fetchList } from '@/api/article'
+import { getChapters } from '@/api/chapter'
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 
 export default {
@@ -102,7 +97,7 @@ export default {
   methods: {
     getList() {
       this.listLoading = true
-      fetchList(this.listQuery).then(response => {
+      getChapters(this.listQuery).then(response => {
         this.list = response.data.items
         this.total = response.data.total
         this.listLoading = false

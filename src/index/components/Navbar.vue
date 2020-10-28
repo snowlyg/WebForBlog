@@ -26,7 +26,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import PanThumb from '@/components/PanThumb'
-import { getArticleDocs } from '@/api/doc'
+import { getPublishedDocs } from '@/api/doc'
 
 export default {
   components: { PanThumb },
@@ -60,7 +60,7 @@ export default {
       }
     },
     getDocs() {
-      getArticleDocs({ offset: -1, limit: -1 }).then(response => {
+      getPublishedDocs({ offset: -1, limit: -1 }).then(response => {
         this.docs = response.data
       })
     }

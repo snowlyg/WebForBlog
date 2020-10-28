@@ -1,13 +1,13 @@
 import request from '@/utils/request'
 
-export function getArticleDocs(query) {
+export function getPublishedDocs(query) {
   return request({
     url: '/docs',
     method: 'get',
     params: query
   })
 }
-export function getArticleDoc(id) {
+export function getPublishedDoc(id) {
   return request({
     url: `/docs/${id}`,
     method: 'get',
@@ -32,6 +32,12 @@ export function addDoc(data) {
   })
 }
 
+export function fetchDoc(id) {
+  return request({
+    url: `/admin/docs/${id}`,
+    method: 'get'
+  })
+}
 export function updateDoc(id, data) {
   return request({
     url: `/admin/docs/${id}`,
