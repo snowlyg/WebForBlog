@@ -175,7 +175,7 @@ const defaultForm = {
   content_short: '', // 文章摘要
   source_uri: '', // 文章外链
   image_uri: '', // 文章图片
-  display_time: undefined, // 前台展示时间
+  display_time: new Date(), // 前台展示时间
   id: undefined,
   is_original: true,
   comment_disabled: false,
@@ -296,6 +296,7 @@ export default {
       const id = this.$route.params && this.$route.params.id
       this.fetchData(id)
     }
+    this.getRemoteUserList()
     this.getRemoteDocList()
 
     // Why need to make a copy of this.$route here?
@@ -432,8 +433,11 @@ export default {
       })
       this.loading = false
     },
-    getRemoteUserList(query) {
-      searchUser(query).then(response => {
+    getRemoteUserList(name) {
+      if (name === undefined) {
+        name = ''
+      }
+      searchUser(name).then(response => {
         if (!response.data) return
         this.userListOptions = response.data.items.map(v => v.name)
       })
