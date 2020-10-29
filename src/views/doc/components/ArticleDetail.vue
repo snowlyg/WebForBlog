@@ -330,6 +330,7 @@ export default {
       document.title = `${title}`
     },
     createOrUpdateArticle() {
+      this.postForm.doc.name = this.docListOptions[this.postForm.doc.id].name
       if (this.postForm.display_time === '') {
         this.$notify({
           message: '发布时间不能为空',

@@ -20,7 +20,10 @@ export function like(id) {
 export function fetchChapter(id) {
   return request({
     url: `/admin/chapters/${id}`,
-    method: 'get'
+    method: 'get',
+    params: {
+      relation: 'Doc'
+    }
   })
 }
 
