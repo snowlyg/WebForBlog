@@ -434,7 +434,7 @@ export default {
     getRemoteUserList(query) {
       searchUser(query).then(response => {
         if (!response.data) return
-        this.userListOptions = response.data.map(v => v.name)
+        this.userListOptions = response.data.items.map(v => v.name)
       })
     },
     getRemoteDocList() {

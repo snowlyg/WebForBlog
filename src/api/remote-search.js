@@ -5,7 +5,7 @@ export function searchUser(name) {
     url: '/admin/users',
     method: 'get',
     params: {
-      searchStr: 'name:' + name
+      name: name + ':like'
     }
   })
 }
