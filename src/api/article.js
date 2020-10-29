@@ -18,7 +18,8 @@ export function indexList(query) {
 export function indexDetail(id) {
   return request({
     url: `/article/${id}`,
-    method: 'get'
+    method: 'get',
+    params: { relation: 'Type;Tags' }
   })
 }
 export function fetchList(query) {

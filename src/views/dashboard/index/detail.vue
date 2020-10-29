@@ -110,7 +110,7 @@ export default {
   methods: {
     likeArticle(id) {
       like(id).then(response => {
-        this.detail = response.data
+        this.detail.like = response.data.like
         this.show = !this.show
         setTimeout(() => {
           this.show = !this.show

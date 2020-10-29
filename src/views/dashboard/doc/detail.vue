@@ -22,12 +22,6 @@
               <div id="viewer" />
             </div>
             <hr>
-            <div>
-              <svg-icon icon-class="tag" class="tag" />
-              <el-tag v-for="(tag_name) in detail.tag_names" :span="4" class="text-center tag_btn">
-                {{ tag_name }}
-              </el-tag>
-            </div>
             <div class="bottom clearfix" />
           </div>
         </el-card>
@@ -109,7 +103,7 @@ export default {
   methods: {
     likeChapter(id) {
       like(id).then(response => {
-        this.detail = response.data
+        this.detail.like = response.data.like
         this.show = !this.show
         setTimeout(() => {
           this.show = !this.show
@@ -164,18 +158,6 @@ export default {
     background-color: #e3e3e3;
     min-height: 100vh;
     padding: 60px 80px;
-
-    .tag {
-      font-size: 14px;
-      margin-right:3px;
-    }
-
-    .tag_btn{
-      padding: 2px;
-      margin: 0 3px;
-      font-size: 9px;
-      line-height: 22px;
-    }
 
     .content_title {
       font-size: 2.0em;
@@ -264,18 +246,6 @@ export default {
       font-size: 2.0em;
       text-align: center;
       margin: 30px 0;
-    }
-
-    .tag {
-      font-size: 14px;
-      margin-right:3px;
-    }
-
-    .tag_btn{
-      padding: 2px;
-      margin: 0 3px;
-      font-size: 9px;
-      line-height: 22px;
     }
 
     .auth_content {

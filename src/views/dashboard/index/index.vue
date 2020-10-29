@@ -22,7 +22,7 @@
 
     <div class="dashboard-editor-container">
       <el-row>
-        <el-col v-for="(item) in aritcles" :key="item.id" class="el-card-div" :span="24">
+        <el-col v-for="(item) in articles" :key="item.id" class="el-card-div" :span="24">
           <el-card :body-style="{ padding: '10px' }">
             <div class="article_data">
               <img :src="item.image_uri" alt="" class="image">
@@ -77,13 +77,14 @@ export default {
   data() {
     return {
       tags: [],
-      aritcles: [],
+      articles: [],
       total: 0,
       title: '',
       listQuery: {
         tagId: 0,
         typeId: 0,
-        searchStr: '',
+        relation: 'Type',
+        title: '',
         orderBy: 'display_time',
         offset: 1,
         limit: 10
@@ -101,14 +102,13 @@ export default {
       this.listQuery.offset = this.page
       this.listQuery.limit = this.pageSize
       indexList(this.listQuery).then(response => {
-        this.aritcles = response.data.items
+        this.articles = response.data.items
         this.total = response.data.total
         this.listQuery.limit = response.data.limit
       })
     },
     getTypeTag() {
       getArticleTypes({ offset: -1, limit: -1 }).then(response => {
-        console.log(response.data.items)
         this.$store.dispatch('type/setTypes', response.data.items).then(() => {
           this.$emit('change')
         })
@@ -118,7 +118,7 @@ export default {
       })
     },
     handleSearch() {
-      this.listQuery.searchStr = 'title:' + this.title
+      this.listQuery.title = this.title + ':like'
       this.getData()
     },
     handleTagSearch(tagId) {
