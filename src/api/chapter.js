@@ -1,5 +1,22 @@
 import request from '@/utils/request'
 
+export function fetchPublishedChapter(id) {
+  return request({
+    url: `/chapter/${id}`,
+    method: 'get',
+    params: {
+      relation: 'Doc'
+    }
+  })
+}
+
+export function like(id) {
+  return request({
+    url: `/chapter/like/${id}`,
+    method: 'get'
+  })
+}
+
 export function fetchChapter(id) {
   return request({
     url: `/admin/chapters/${id}`,

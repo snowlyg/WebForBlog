@@ -2,7 +2,7 @@
   <div class="app-container">
     <el-button type="primary" @click="handleAddPerm">添加权限</el-button>
 
-    <el-table :data="permsList" style="width: 100%;margin-top:30px;" border>
+    <el-table v-loading="listLoading" :data="permsList" style="width: 100%;margin-top:30px;" border>
       <el-table-column align="center" label="ID" width="220">
         <template slot-scope="scope">
           {{ scope.row.id }}
@@ -61,13 +61,21 @@
         <el-button type="primary" @click="confirmPerm">确认</el-button>
       </div>
     </el-dialog>
+    <pagination
+      v-show="total>0"
+      :total="total"
+      :page.sync="listQuery.page"
+      :limit.sync="listQuery.limit"
+      @pagination="getPerms"
+    />
   </div>
 </template>
 
 <script>
 
 import { deepClone } from '@/utils'
-import { getPerms, addPerm, deletePerm, updatePerm } from '@/api/perm'
+import { addPerm, deletePerm, getPerms, updatePerm } from '@/api/perm'
+import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 
 const defaultPerm = {
   id: 0,
@@ -78,6 +86,7 @@ const defaultPerm = {
 }
 
 export default {
+  components: { Pagination },
   data() {
     return {
       perm: Object.assign({}, defaultPerm),
@@ -88,18 +97,26 @@ export default {
       defaultProps: {
         children: 'children',
         label: 'title'
+      },
+      total: 0,
+      listLoading: true,
+      listQuery: {
+        page: 1,
+        limit: 20
       }
     }
   },
-  computed: {
-  },
+  computed: {},
   created() {
     this.getPerms()
   },
   methods: {
     async getPerms() {
-      const res = await getPerms()
-      this.permsList = res.data
+      this.listLoading = true
+      const res = await getPerms(this.listQuery)
+      this.permsList = res.data.items
+      this.total = res.data.total
+      this.listLoading = false
     },
     handleAddPerm() {
       this.perm = Object.assign({}, defaultPerm)
@@ -123,16 +140,14 @@ export default {
         confirmButtonText: '确认',
         cancelButtonText: '取消',
         type: 'warning'
-      })
-        .then(async() => {
-          await deletePerm(row.id)
-          this.permsList.splice($index, 1)
-          this.$message({
-            type: 'success',
-            message: '删除成功!'
-          })
+      }).then(async() => {
+        await deletePerm(row.id)
+        this.permsList.splice($index, 1)
+        this.$message({
+          type: 'success',
+          message: '删除成功!'
         })
-        .catch(err => { console.error(err) })
+      }).catch(err => { console.error(err) })
     },
     async confirmPerm() {
       const isEdit = this.dialogType === 'edit'
@@ -141,7 +156,7 @@ export default {
         // eslint-disable-next-line eqeqeq
         if (code === 200) {
           for (let index = 0; index < this.permsList.length; index++) {
-            if (this.permsList[index].id === this.perm.id) {
+            if (this.permsList[ index ].id === this.perm.id) {
               this.permsList.splice(index, 1, Object.assign({}, this.perm))
               break
             }

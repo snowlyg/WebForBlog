@@ -2,7 +2,7 @@
   <div class="app-container">
     <el-button type="primary" @click="handleAddRole">添加角色</el-button>
 
-    <el-table :data="rolesList" style="width: 100%;margin-top:30px;" border>
+    <el-table v-loading="listLoading" :data="rolesList" style="width: 100%;margin-top:30px;" border>
       <el-table-column align="center" label="ID" width="220">
         <template slot-scope="scope">
           {{ scope.row.id }}
@@ -64,6 +64,13 @@
         <el-button type="primary" @click="confirmRole">确认</el-button>
       </div>
     </el-dialog>
+    <pagination
+      v-show="total>0"
+      :total="total"
+      :page.sync="listQuery.page"
+      :limit.sync="listQuery.limit"
+      @pagination="getRoles"
+    />
   </div>
 </template>
 
@@ -71,6 +78,7 @@
 
 import { deepClone } from '@/utils'
 import { getRoutes, getRoles, addRole, deleteRole, updateRole } from '@/api/role'
+import Pagination from '@/components/Pagination/index'
 
 const defaultRole = {
   id: 0,
@@ -82,6 +90,7 @@ const defaultRole = {
 }
 
 export default {
+  components: { Pagination },
   data() {
     return {
       role: Object.assign({}, defaultRole),
@@ -93,6 +102,12 @@ export default {
       defaultProps: {
         children: 'children',
         label: 'title'
+      },
+      total: 0,
+      listLoading: true,
+      listQuery: {
+        page: 1,
+        limit: 20
       }
     }
   },
@@ -109,12 +124,15 @@ export default {
   methods: {
     async getRoutes() {
       const res = await getRoutes()
-      this.serviceRoutes = res.data
-      this.perms = this.generateRoutes(res.data)
+      this.serviceRoutes = res.data.items
+      this.perms = this.generateRoutes(res.data.items)
     },
     async getRoles() {
-      const res = await getRoles()
-      this.rolesList = res.data
+      this.listLoading = true
+      const res = await getRoles(this.listQuery)
+      this.rolesList = res.data.items
+      this.total = res.data.total
+      this.listLoading = false
     },
 
     // Reshape the routes structure so that it looks the same as the sidebar

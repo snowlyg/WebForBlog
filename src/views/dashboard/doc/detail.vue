@@ -6,14 +6,14 @@
           <div style="padding: 14px;">
             <div class="content_title">{{ detail.title }}</div>
             <div class="auth_content">
-              <el-tooltip content="文章分类" placement="top"><svg-icon icon-class="folder" class="svg-icon" /></el-tooltip><span> {{ detail.type.name }} </span> /
+              <el-tooltip content="文档名称" placement="top"><svg-icon icon-class="folder" class="svg-icon" /></el-tooltip><span> {{ detail.doc.name }} </span> /
               <el-tooltip content="文章作者" placement="top"><svg-icon icon-class="author" class="svg-icon" /></el-tooltip> <span>{{ detail.author }} </span> /
               <el-tooltip content="阅读量" placement="top">
                 <svg-icon icon-class="eye-filer" class="svg-icon eye-filer" />
               </el-tooltip><span>{{ detail.read }} </span> /
               <el-tooltip content="点赞文章" placement="top">
                 <transition name="fade">
-                  <svg-icon v-if="show" icon-class="like" class="svg-icon" @click="likeArticle(detail.id)" />
+                  <svg-icon v-if="show" icon-class="like" class="svg-icon" @click="likeChapter(detail.id)" />
                 </transition> </el-tooltip><span>{{ detail.like }} </span> /
               <el-tooltip content="发布时间" placement="top"><svg-icon icon-class="time" class="svg-icon" /></el-tooltip> <time class="time">{{ detail.display_at | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</time>
             </div>
@@ -47,7 +47,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { getArticleByChapterId, like } from '@/api/article'
+import { fetchPublishedChapter, like } from '@/api/chapter'
 import '@toast-ui/editor/dist/toastui-editor-viewer.css'
 import Viewer from '@toast-ui/editor/dist/toastui-editor-viewer'
 import 'highlight.js/styles/github.css'
@@ -70,22 +70,15 @@ const defaultDetail = {
   importance: 0,
   like: 0,
   read: 0,
-  type: {
+  doc: {
     name: ''
-  },
-  chapter: {
-    name: '',
-    doc: {
-      name: ''
-    }
-  },
-  tag_names: []
+  }
 }
 
 export default {
   metaInfo() {
     return {
-      title: `${this.detail.title} -${this.detail.chapter.name}-${this.detail.chapter.doc.name}`,
+      title: `${this.detail.title} -${this.detail.doc.name}`,
       bodyAttrs: {
         class: 'child-component'
       }
@@ -114,7 +107,7 @@ export default {
     this.getDetail(id)
   },
   methods: {
-    likeArticle(id) {
+    likeChapter(id) {
       like(id).then(response => {
         this.detail = response.data
         this.show = !this.show
@@ -124,8 +117,7 @@ export default {
       })
     },
     getDetail(id) {
-      this.listLoading = true
-      getArticleByChapterId(id).then(response => {
+      fetchPublishedChapter(id).then(response => {
         this.detail = response.data
 
         new Viewer({

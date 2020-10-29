@@ -8,10 +8,11 @@ export function getArticleTags(query) {
   })
 }
 
-export function getTags() {
+export function getTags(query) {
   return request({
     url: '/admin/tags',
-    method: 'get'
+    method: 'get',
+    params: query
   })
 }
 

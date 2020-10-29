@@ -2,7 +2,7 @@
   <div class="app-container">
     <el-button type="primary" @click="handleAddUser">添加用户</el-button>
 
-    <el-table :data="usersList" style="width: 100%;margin-top:30px;" border>
+    <el-table v-loading="listLoading" :data="usersList" style="width: 100%;margin-top:30px;" border>
       <el-table-column align="center" label="ID" width="220">
         <template slot-scope="scope">
           {{ scope.row.id }}
@@ -72,6 +72,13 @@
         <el-button type="primary" @click="confirmUser">确认</el-button>
       </div>
     </el-dialog>
+    <pagination
+      v-show="total>0"
+      :total="total"
+      :page.sync="listQuery.page"
+      :limit.sync="listQuery.limit"
+      @pagination="getUsers"
+    />
   </div>
 </template>
 
@@ -79,6 +86,7 @@
 
 import { deepClone } from '@/utils'
 import { getRoles, getUsers, addUser, deleteUser, updateUser } from '@/api/users'
+import Pagination from '@/components/Pagination/index'
 
 const defaultUser = {
   id: 0,
@@ -91,6 +99,7 @@ const defaultUser = {
 }
 
 export default {
+  components: { Pagination },
   data() {
     return {
       user: Object.assign({}, defaultUser),
@@ -102,6 +111,12 @@ export default {
       defaultProps: {
         children: 'children',
         label: 'title'
+      },
+      total: 0,
+      listLoading: true,
+      listQuery: {
+        page: 1,
+        limit: 20
       }
     }
   },
@@ -118,12 +133,15 @@ export default {
   methods: {
     async getRoles() {
       const res = await getRoles()
-      this.serviceRoles = res.data
-      this.roles = this.generateRoles(res.data)
+      this.serviceRoles = res.data.items
+      this.roles = this.generateRoles(res.data.items)
     },
     async getUsers() {
-      const res = await getUsers()
-      this.usersList = res.data
+      this.listLoading = true
+      const res = await getUsers(this.listQuery)
+      this.usersList = res.data.items
+      this.total = res.data.total
+      this.listLoading = false
     },
 
     // Reshape the routes structure so that it looks the same as the sidebar

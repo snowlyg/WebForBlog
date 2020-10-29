@@ -2,7 +2,7 @@
   <div class="app-container">
     <el-button type="primary" @click="handleAddType">添加分类</el-button>
 
-    <el-table :data="typesList" style="width: 100%;margin-top:30px;" border>
+    <el-table v-loading="listLoading" :data="typesList" style="width: 100%;margin-top:30px;" border>
       <el-table-column align="center" label="ID" width="220">
         <template slot-scope="scope">
           {{ scope.row.id }}
@@ -32,6 +32,13 @@
         <el-button type="primary" @click="confirmType">确认</el-button>
       </div>
     </el-dialog>
+    <pagination
+      v-show="total>0"
+      :total="total"
+      :page.sync="listQuery.page"
+      :limit.sync="listQuery.limit"
+      @pagination="getTypes"
+    />
   </div>
 </template>
 
@@ -40,12 +47,15 @@
 import { deepClone } from '@/utils'
 import { getTypes, addType, deleteType, updateType } from '@/api/type'
 
+import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
+
 const defaultType = {
   id: 0,
   name: ''
 }
 
 export default {
+  components: { Pagination },
   data() {
     return {
       type: Object.assign({}, defaultType),
@@ -56,6 +66,12 @@ export default {
       defaultProps: {
         children: 'children',
         label: 'title'
+      },
+      total: 0,
+      listLoading: true,
+      listQuery: {
+        page: 1,
+        limit: 20
       }
     }
   },
@@ -66,8 +82,11 @@ export default {
   },
   methods: {
     async getTypes() {
-      const res = await getTypes()
-      this.typesList = res.data
+      this.listLoading = true
+      const res = await getTypes(this.listQuery)
+      this.typesList = res.data.items
+      this.total = res.data.total
+      this.listLoading = false
     },
     handleAddType() {
       this.type = Object.assign({}, defaultType)

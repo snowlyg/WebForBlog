@@ -11,10 +11,11 @@ export function getRoutes() {
   })
 }
 
-export function getRoles() {
+export function getRoles(query) {
   return request({
     url: '/admin/roles',
-    method: 'get'
+    method: 'get',
+    params: query
   })
 }
 

@@ -61,7 +61,7 @@ export default {
     },
     getDocs() {
       getPublishedDocs({ offset: -1, limit: -1 }).then(response => {
-        this.docs = response.data
+        this.docs = response.data.items
       })
     }
   }

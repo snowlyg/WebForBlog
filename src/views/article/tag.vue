@@ -2,7 +2,7 @@
   <div class="app-container">
     <el-button type="primary" @click="handleAddTag">添加标签</el-button>
 
-    <el-table :data="tagsList" style="width: 100%;margin-top:30px;" border>
+    <el-table v-loading="listLoading" :data="tagsList" style="width: 100%;margin-top:30px;" border>
       <el-table-column align="center" label="ID" width="220">
         <template slot-scope="scope">
           {{ scope.row.id }}
@@ -32,6 +32,13 @@
         <el-button type="primary" @click="confirmTag">确认</el-button>
       </div>
     </el-dialog>
+    <pagination
+      v-show="total>0"
+      :total="total"
+      :page.sync="listQuery.page"
+      :limit.sync="listQuery.limit"
+      @pagination="getTags"
+    />
   </div>
 </template>
 
@@ -40,12 +47,15 @@
 import { deepClone } from '@/utils'
 import { getTags, addTag, deleteTag, updateTag } from '@/api/tag'
 
+import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
+
 const defaultTag = {
   id: 0,
   name: ''
 }
 
 export default {
+  components: { Pagination },
   data() {
     return {
       tag: Object.assign({}, defaultTag),
@@ -56,6 +66,12 @@ export default {
       defaultProps: {
         children: 'children',
         label: 'title'
+      },
+      total: 0,
+      listLoading: true,
+      listQuery: {
+        page: 1,
+        limit: 20
       }
     }
   },
@@ -66,8 +82,11 @@ export default {
   },
   methods: {
     async getTags() {
-      const res = await getTags()
-      this.tagsList = res.data
+      this.listLoading = true
+      const res = await getTags(this.listQuery)
+      this.tagsList = res.data.items
+      this.total = res.data.total
+      this.listLoading = false
     },
     handleAddTag() {
       this.tag = Object.assign({}, defaultTag)

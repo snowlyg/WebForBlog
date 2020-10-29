@@ -100,8 +100,6 @@ export default {
       this.listLoading = true
       this.listQuery.offset = this.page
       this.listQuery.limit = this.pageSize
-      console.log(this.$store.getters.pageSize)
-      console.log(this.$store.getters.page)
       indexList(this.listQuery).then(response => {
         this.aritcles = response.data.items
         this.total = response.data.total
@@ -110,12 +108,13 @@ export default {
     },
     getTypeTag() {
       getArticleTypes({ offset: -1, limit: -1 }).then(response => {
-        this.$store.dispatch('type/setTypes', response.data).then(() => {
+        console.log(response.data.items)
+        this.$store.dispatch('type/setTypes', response.data.items).then(() => {
           this.$emit('change')
         })
       })
       getArticleTags({ offset: -1, limit: -1 }).then(response => {
-        this.tags = response.data
+        this.tags = response.data.items
       })
     },
     handleSearch() {

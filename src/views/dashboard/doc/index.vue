@@ -44,7 +44,6 @@ export default {
   },
   methods: {
     getDetail(id) {
-      this.listLoading = true
       getPublishedDoc(id).then(response => {
         this.doc = response.data
       })

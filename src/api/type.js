@@ -7,10 +7,11 @@ export function getArticleTypes(query) {
     params: query
   })
 }
-export function getTypes() {
+export function getTypes(query) {
   return request({
     url: '/admin/types',
-    method: 'get'
+    method: 'get',
+    params: query
   })
 }
 

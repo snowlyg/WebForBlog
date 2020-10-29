@@ -7,13 +7,6 @@ export function like(id) {
   })
 }
 
-export function getArticleByChapterId(id) {
-  return request({
-    url: `/article/${id}/chapter`,
-    method: 'get'
-  })
-}
-
 export function indexList(query) {
   return request({
     url: '/article',
