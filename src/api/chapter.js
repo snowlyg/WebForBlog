@@ -31,7 +31,7 @@ export function getChapters(query) {
   return request({
     url: '/admin/chapters',
     method: 'get',
-    query
+    params: query
   })
 }
 
