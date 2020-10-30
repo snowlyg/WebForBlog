@@ -33,7 +33,10 @@ export function fetchList(query) {
 export function fetchArticle(id) {
   return request({
     url: `/admin/article/${id}`,
-    method: 'get'
+    method: 'get',
+    params: {
+      relation: 'Type;Tags'
+    }
   })
 }
 

@@ -379,6 +379,7 @@ export default {
       document.title = `${title}`
     },
     createOrUpdateArticle() {
+      this.postForm.type.name = this.typeListOptions[this.postForm.type.id].name
       if (this.postForm.display_time === '') {
         this.$notify({
           message: '发布时间不能为空',
@@ -491,7 +492,7 @@ export default {
     getRemoteTypeList() {
       getTypes().then(response => {
         if (!response.data) return
-        this.typeListOptions = this.typeListOptions.concat(response.data)
+        this.typeListOptions = this.typeListOptions.concat(response.data.items)
       })
     },
     getHtml() {
