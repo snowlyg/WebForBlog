@@ -27,13 +27,11 @@ export function fetchChapter(id) {
   })
 }
 
-export function getChapters(docId) {
+export function getChapters(query) {
   return request({
     url: '/admin/chapters',
     method: 'get',
-    params: {
-      docId: docId
-    }
+    query
   })
 }
 
