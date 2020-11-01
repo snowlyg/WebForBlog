@@ -47,7 +47,7 @@
       </el-row>
       <simple-pagination
         :total="total"
-        :page.sync="listQuery.offset"
+        :page.sync="listQuery.page"
         :limit.sync="listQuery.limit"
         @pagination="getData"
       />
@@ -86,7 +86,7 @@ export default {
         relation: 'Type',
         title: '',
         orderBy: 'display_time',
-        offset: 1,
+        page: 1,
         limit: 10
       }
     }
@@ -99,7 +99,7 @@ export default {
   methods: {
     getData() {
       this.listLoading = true
-      this.listQuery.offset = this.page
+      this.listQuery.page = this.page
       this.listQuery.limit = this.pageSize
       indexList(this.listQuery).then(response => {
         this.articles = response.data.items
@@ -108,12 +108,12 @@ export default {
       })
     },
     getTypeTag() {
-      getArticleTypes({ offset: -1, limit: -1 }).then(response => {
+      getArticleTypes({ page: -1, limit: -1 }).then(response => {
         this.$store.dispatch('type/setTypes', response.data.items).then(() => {
           this.$emit('change')
         })
       })
-      getArticleTags({ offset: -1, limit: -1 }).then(response => {
+      getArticleTags({ page: -1, limit: -1 }).then(response => {
         this.tags = response.data.items
       })
     },
