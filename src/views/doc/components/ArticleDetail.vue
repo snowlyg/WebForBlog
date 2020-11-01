@@ -171,6 +171,7 @@ import { CommentDropdown, PlatformDropdown, SourceUrlDropdown } from './Dropdown
 const defaultForm = {
   status: 'draft',
   title: '', // 文章题目
+  sort: 0, // 文章排序
   content: '', // 文章内容
   content_short: '', // 文章摘要
   source_uri: '', // 文章外链
@@ -331,7 +332,7 @@ export default {
       document.title = `${title}`
     },
     createOrUpdateArticle() {
-      this.postForm.doc.name = this.docListOptions[this.postForm.doc.id].name
+      this.postForm.doc.name = this.docListOptions[ this.postForm.doc.id ].name
       if (this.postForm.display_time === '') {
         this.$notify({
           message: '发布时间不能为空',
@@ -350,7 +351,7 @@ export default {
               type: 'success',
               duration: 2000
             })
-            this.$router.push('/admin/doc/index')
+            this.$router.push('/admin/doc/index/' + this.postForm.doc.id)
           } else {
             this.$notify({
               message: response.message,
@@ -361,6 +362,7 @@ export default {
           console.log(err)
         })
       } else {
+        this.postForm.sort = this.docListOptions.length
         addChapter(this.postForm).then(response => {
           if (response.code === 200) {
             this.$notify({
@@ -369,7 +371,7 @@ export default {
               type: 'success',
               duration: 2000
             })
-            this.$router.push('/admin/doc/index')
+            this.$router.push('/admin/doc/index/' + this.postForm.doc.id)
           } else {
             this.$notify({
               message: response.message,
@@ -421,7 +423,7 @@ export default {
             type: 'success',
             duration: 2000
           })
-          this.$router.push('/admin/doc/index')
+          this.$router.push('/admin/doc/index/' + this.postForm.doc.id)
         } else {
           this.$notify({
             message: response.message,

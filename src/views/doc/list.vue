@@ -1,6 +1,11 @@
 <template>
   <div class="app-container">
-    <el-table v-loading="listLoading" :data="list" border fit highlight-current-row style="width: 100%">
+    <el-table ref="dragTable" v-loading="listLoading" :data="list" border fit highlight-current-row style="width: 100%">
+      <el-table-column width="60px" align="center" label="排序">
+        <template slot-scope="scope">
+          <span>{{ scope.row.sort }}</span>
+        </template>
+      </el-table-column>
       <el-table-column align="center" label="ID" width="80">
         <template slot-scope="scope">
           <span>{{ scope.row.id }}</span>
@@ -45,15 +50,26 @@
       </el-table-column>
       <el-table-column align="center" label="操作" width="240">
         <template slot-scope="scope">
-          <router-link :to="'/admin/doc/edit/'+scope.row.id">
-            <el-button type="primary" size="small" icon="el-icon-edit">
+          <el-button type="primary" size="small" icon="el-icon-edit">
+            <router-link :to="'/admin/doc/edit/'+scope.row.id">
               编辑
-            </el-button>
-          </router-link>
+            </router-link>
+          </el-button>
+          <el-button type="primary" size="small" @click="handleSort(scope)">设置排序</el-button>
         </template>
       </el-table-column>
     </el-table>
-
+    <el-dialog :visible.sync="dialogVisible" title="设置排序">
+      <el-form :model="chapter" label-width="80px" label-position="left">
+        <el-form-item label="排序">
+          <el-input-number v-model="chapter.sort" type="number" placeholder="排序" />
+        </el-form-item>
+      </el-form>
+      <div style="text-align:right;">
+        <el-button type="danger" @click="dialogVisible=false">取消</el-button>
+        <el-button type="primary" @click="confirmSort">确认</el-button>
+      </div>
+    </el-dialog>
     <pagination
       v-show="total>0"
       :total="total"
@@ -65,8 +81,9 @@
 </template>
 
 <script>
-import { getChapters } from '@/api/chapter'
+import { getChapters, sortChapter, setChapterSort } from '@/api/chapter'
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
+import Sortable from 'sortablejs'
 
 export default {
   name: 'ArticleList',
@@ -82,27 +99,109 @@ export default {
   },
   data() {
     return {
+      chapter: {
+        id: 0,
+        sort: 0
+      },
+      dialogVisible: false,
       list: null,
       total: 0,
       listLoading: true,
       listQuery: {
+        sort: 'asc',
+        orderBy: 'sort',
+        docId: 0,
         page: 1,
         limit: 20
-      }
+      },
+      sortable: null
     }
   },
   created() {
+    this.listQuery.docId = this.$route.params && this.$route.params.id
     this.getList()
   },
   methods: {
+    handleSort(scope) {
+      this.dialogVisible = true
+      this.chapter.id = scope.row.id
+      this.chapter.sort = scope.row.sort
+    },
     getList() {
       this.listLoading = true
       getChapters(this.listQuery).then(response => {
         this.list = response.data.items
         this.total = response.data.total
         this.listLoading = false
+        this.$nextTick(() => {
+          this.setSort()
+        })
+      })
+    },
+    async confirmSort() {
+      const { code, data } = await setChapterSort(this.chapter, this.chapter.id)
+      // eslint-disable-next-line eqeqeq
+      if (code === 200) {
+        for (let index = 0; index < this.list.length; index++) {
+          if (this.list[index].id === data.id) {
+            this.list[index].sort = data.sort
+            break
+          }
+        }
+      }
+      this.dialogVisible = false
+      this.$notify({
+        title: 'Success',
+        dangerouslyUseHTMLString: true,
+        message: `设置成功`,
+        type: 'success'
+      })
+    },
+    setSort() {
+      const el = this.$refs.dragTable.$el.querySelectorAll('.el-table__body-wrapper > table > tbody')[ 0 ]
+      this.sortable = Sortable.create(el, {
+        ghostClass: 'sortable-ghost', // Class name for the drop placeholder,
+        setData: function(dataTransfer) {
+          // to avoid Firefox bug
+          // Detail see : https://github.com/RubaXa/Sortable/issues/1012
+          dataTransfer.setData('Text', '')
+        },
+        onEnd: evt => {
+          const old = this.list[ evt.oldIndex ]
+          const other = this.list[ evt.newIndex ]
+          sortChapter({ old_id: old.id, old_sort: other.sort, new_id: other.id, new_sort: old.sort }).then(response => {
+            if (response.code === 200) {
+              this.list[ evt.oldIndex ].sort = other.sort
+              this.list[ evt.newIndex ].sort = old.sort
+            }
+          })
+        }
       })
     }
   }
 }
 </script>
+
+<style>
+.sortable-ghost {
+  opacity: .8;
+  color: #fff !important;
+  background: #42b983 !important;
+}
+</style>
+
+<style scoped>
+.icon-star {
+  margin-right: 2px;
+}
+
+.drag-handler {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+.show-d {
+  margin-top: 15px;
+}
+</style>

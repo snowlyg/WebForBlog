@@ -51,6 +51,22 @@ export function updateChapter(data, id) {
   })
 }
 
+export function setChapterSort(data, id) {
+  return request({
+    url: `/admin/chapters/${id}/set_sort`,
+    method: 'put',
+    data
+  })
+}
+
+export function sortChapter(data) {
+  return request({
+    url: `/admin/chapters/sort`,
+    method: 'put',
+    data
+  })
+}
+
 export function deleteChapter(id) {
   return request({
     url: `/admin/chapters/${id}`,

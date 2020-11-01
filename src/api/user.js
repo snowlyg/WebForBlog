@@ -11,7 +11,7 @@ export function login(data) {
 export function expire() {
   return request({
     url: '/admin/expire',
-    method: 'post'
+    method: 'get'
   })
 }
 

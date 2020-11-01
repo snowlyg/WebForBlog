@@ -15,6 +15,11 @@
       </el-table-column>
       <el-table-column align="center" label="操作">
         <template slot-scope="scope">
+          <el-button type="warning" size="small">
+            <router-link :to="'/admin/doc/index/'+scope.row.id">
+              章节管理
+            </router-link>
+          </el-button>
           <el-button type="primary" size="small" @click="handleEdit(scope)">编辑</el-button>
           <el-button type="danger" size="small" @click="handleDelete(scope)">删除</el-button>
         </template>
@@ -38,7 +43,7 @@
 <script>
 
 import { deepClone } from '@/utils'
-import { getDocs, addDoc, deleteDoc, updateDoc } from '@/api/doc'
+import { addDoc, deleteDoc, getDocs, updateDoc } from '@/api/doc'
 
 const defaultDoc = {
   id: 0,
@@ -59,8 +64,7 @@ export default {
       }
     }
   },
-  computed: {
-  },
+  computed: {},
   created() {
     this.getDocs()
   },
@@ -88,16 +92,14 @@ export default {
         confirmButtonText: '确认',
         cancelButtonText: '取消',
         type: 'warning'
-      })
-        .then(async() => {
-          await deleteDoc(row.id)
-          this.docsList.splice($index, 1)
-          this.$message({
-            type: 'success',
-            message: '删除成功!'
-          })
+      }).then(async() => {
+        await deleteDoc(row.id)
+        this.docsList.splice($index, 1)
+        this.$message({
+          type: 'success',
+          message: '删除成功!'
         })
-        .catch(err => { console.error(err) })
+      }).catch(err => { console.error(err) })
     },
     async confirmDoc() {
       const isEdit = this.dialogDoc === 'edit'
@@ -108,7 +110,7 @@ export default {
         if (code === 200) {
           this.doc = data
           for (let index = 0; index < this.docsList.length; index++) {
-            if (this.docsList[index].id === this.doc.id) {
+            if (this.docsList[ index ].id === this.doc.id) {
               this.docsList.splice(index, 1, Object.assign({}, this.doc))
               break
             }
@@ -146,6 +148,7 @@ export default {
   .types-table {
     margin-top: 30px;
   }
+
   .permission-tree {
     margin-bottom: 30px;
   }

@@ -245,7 +245,7 @@ export const asyncRoutes = [
   {
     path: '/admin/doc',
     component: Layout,
-    redirect: '/admin/doc/index',
+    redirect: '/admin/doc/doc',
     alwaysShow: true, // will always show the root menu
     name: '文档管理',
     meta: {
@@ -265,11 +265,12 @@ export const asyncRoutes = [
         }
       },
       {
-        path: '/admin/doc/index',
+        path: '/admin/doc/index/:id(\\d+)',
         component: () => import('@/views/doc/list'),
-        name: '文档列表',
+        name: '文档章节',
+        hidden: true,
         meta: {
-          title: '文档列表',
+          title: '文档章节',
           roles: ['admin'], // or you can only set roles in sub nav
           icon: 'list'
         }
@@ -287,9 +288,9 @@ export const asyncRoutes = [
       {
         path: '/admin/doc/doc',
         component: () => import('@/views/doc/doc'),
-        name: '文档名称',
+        name: '文档列表',
         meta: {
-          title: '文档名称',
+          title: '文档列表',
           roles: ['admin']
         }
       }
