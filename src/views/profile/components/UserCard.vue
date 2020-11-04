@@ -8,7 +8,10 @@
       <div class="box-center">
         <pan-thumb :image="user.avatar" :height="'100px'" :width="'100px'" :hoverable="false">
           <div>你好</div>
-          <div v-for="(role) in user.roles">{{ role.name }}</div>
+          <div v-for="(role) in user.roles" :key="role.id" class="user-role text-center text-muted">{{
+            role.name
+          }}
+          </div>
         </pan-thumb>
       </div>
       <div class="box-center">
@@ -17,9 +20,31 @@
       </div>
     </div>
 
+    <el-button
+      type="primary"
+      icon="el-icon-upload"
+      style="bottom: 15px;margin: 40px 60px;"
+      @click="imagecropperShow=true"
+    >
+      上传头像
+    </el-button>
+
+    <image-cropper
+      v-show="imagecropperShow"
+      :key="imagecropperKey"
+      :width="300"
+      :height="300"
+      url="url"
+      lang-type="zh"
+      @close="close"
+      @crop-upload-success="cropSuccess"
+    />
+
     <div class="user-bio">
       <div class="user-education user-bio-section">
-        <div class="user-bio-section-header"><svg-icon icon-class="education" /><span>个人简介</span></div>
+        <div class="user-bio-section-header">
+          <svg-icon icon-class="education" />
+          <span>个人简介</span></div>
         <div class="user-bio-section-body">
           <div class="text-muted">
             一个纯粹的变成爱好者。
@@ -28,7 +53,9 @@
       </div>
 
       <div class="user-skills user-bio-section">
-        <div class="user-bio-section-header"><svg-icon icon-class="skill" /><span>技术栈</span></div>
+        <div class="user-bio-section-header">
+          <svg-icon icon-class="skill" />
+          <span>技术栈</span></div>
         <div class="user-bio-section-body">
           <div class="progress-item">
             <span>PHP</span>
@@ -54,20 +81,42 @@
 
 <script>
 import PanThumb from '@/components/PanThumb'
+import ImageCropper from '@/components/ImageCropper'
 
 export default {
-  components: { PanThumb },
+  components: { PanThumb, ImageCropper },
   props: {
     user: {
       type: Object,
       default: () => {
         return {
+          id: '',
           name: '',
           email: '',
           avatar: '',
           role: ''
         }
       }
+    }
+  },
+  data() {
+    return {
+      imagecropperShow: false,
+      imagecropperKey: 0
+    }
+  },
+  methods: {
+    async cropSuccess(resData) {
+      this.imagecropperShow = false
+      this.imagecropperKey = this.imagecropperKey + 1
+      this.$store.dispatch('user/setAvatar', resData).then(() => {
+        this.$store.dispatch('user/getInfo')
+      }).catch(() => {
+
+      })
+    },
+    close() {
+      this.imagecropperShow = false
     }
   }
 }

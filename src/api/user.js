@@ -22,6 +22,14 @@ export function getInfo() {
   })
 }
 
+export function changeAvatar(data) {
+  return request({
+    url: '/admin/change_avatar',
+    method: 'put',
+    data
+  })
+}
+
 export function logout() {
   return request({
     url: '/admin/logout',
