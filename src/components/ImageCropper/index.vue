@@ -793,7 +793,11 @@ export default {
       return new Promise((resolve, reject) => {
         uploadFile(fmData).then(response => {
           this.loading = 2
-          this.$emit('crop-upload-success', response.data)
+          if (response.data.qiniu === '') {
+            this.$emit('crop-upload-success', response.data.local)
+          } else {
+            this.$emit('crop-upload-success', response.data.qiniu)
+          }
           resolve(true)
         }).catch(err => {
           console.log(err)

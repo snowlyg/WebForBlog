@@ -491,7 +491,7 @@ export default {
     },
     getRemoteTypeList() {
       getTypes().then(response => {
-        if (!response.data) return
+        if (!response.data || response.data.total === 0) return
         this.typeListOptions = this.typeListOptions.concat(response.data.items)
       })
     },
