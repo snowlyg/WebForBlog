@@ -3,15 +3,15 @@
     <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
       <el-submenu index="1">
         <template slot="title">技术文章</template>
-        <el-menu-item v-for="(item) in types" :index="item.id.toString()">{{ item.name }}</el-menu-item>
+        <el-menu-item v-for="(item) in types" :key="item.id.toString()">{{ item.name }}</el-menu-item>
       </el-submenu>
       <el-submenu index="2">
         <template slot="title">文档翻译</template>
-        <el-menu-item v-for="(item) in docs" :index="item.id.toString()">{{ item.name }}</el-menu-item>
+        <el-menu-item v-for="(item) in docs" :key="item.id.toString()">{{ item.name }}</el-menu-item>
       </el-submenu>
     </el-menu>
     <div class="text-center">
-      <pan-thumb image="">snowlyg</pan-thumb>
+      <pan-thumb :image="avatar">snowlyg</pan-thumb>
     </div>
     <div class="other_web text-center">
       <p>努力决定一切，不向命运屈服</p>
@@ -27,16 +27,19 @@
 import { mapGetters } from 'vuex'
 import PanThumb from '@/components/PanThumb'
 import { getPublishedDocs } from '@/api/doc'
+import { getAdminInfo } from '@/api/user'
 
 export default {
   components: { PanThumb },
   data() {
     return {
+      avatar: '',
       docs: [],
       activeIndex: '1'
     }
   },
   created() {
+    this.getAdmin()
     this.getDocs()
   },
   // eslint-disable-next-line vue/order-in-components
@@ -62,6 +65,11 @@ export default {
     getDocs() {
       getPublishedDocs({ offset: -1, limit: -1 }).then(response => {
         this.docs = response.data.items
+      })
+    },
+    getAdmin() {
+      getAdminInfo().then(response => {
+        this.avatar = response.data.avatar
       })
     }
   }
