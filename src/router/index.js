@@ -258,6 +258,7 @@ export const asyncRoutes = [
         path: '/admin/doc/create',
         component: () => import('@/views/doc/create'),
         name: '创建文档',
+        hidden: true,
         meta: {
           title: '创建文档',
           roles: ['admin'], // or you can only set roles in sub nav

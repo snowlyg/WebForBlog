@@ -3,11 +3,11 @@
     <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
       <el-submenu index="1">
         <template slot="title">技术文章</template>
-        <el-menu-item v-for="(item) in types" :key="item.id.toString()">{{ item.name }}</el-menu-item>
+        <el-menu-item v-for="(item) in types" :index="item.id.toString()">{{ item.name }}</el-menu-item>
       </el-submenu>
       <el-submenu index="2">
         <template slot="title">文档翻译</template>
-        <el-menu-item v-for="(item) in docs" :key="item.id.toString()">{{ item.name }}</el-menu-item>
+        <el-menu-item v-for="(item) in docs" :index="item.id.toString()">{{ item.name }}</el-menu-item>
       </el-submenu>
     </el-menu>
     <div class="text-center">

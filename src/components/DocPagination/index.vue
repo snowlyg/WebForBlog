@@ -1,12 +1,15 @@
 <template>
-  <div :class="{'hidden':hidden}" class="pagination-container text-center">
+  <div :class="{'hidden':hidden}" class="pagination-container">
     <el-pagination
+      style="text-align: center"
       :background="background"
       :current-page.sync="currentPage"
       :page-size.sync="pageSize"
       :layout="layout"
       :page-sizes="pageSizes"
       :total="total"
+      :prev-text="prevText"
+      :next-text="nextText"
       v-bind="$attrs"
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
@@ -15,6 +18,7 @@
 </template>
 
 <script>
+import { scrollTo } from '@/utils/scroll-to'
 
 export default {
   name: 'Pagination',
@@ -39,11 +43,19 @@ export default {
     },
     layout: {
       type: String,
-      default: ' prev, pager, next'
+      default: 'prev, next'
+    },
+    prevText: {
+      type: String,
+      default: '上一页'
+    },
+    nextText: {
+      type: String,
+      default: '下一页'
     },
     background: {
       type: Boolean,
-      default: true
+      default: false
     },
     autoScroll: {
       type: Boolean,
@@ -74,18 +86,12 @@ export default {
   },
   methods: {
     handleSizeChange(val) {
-      this.$store.dispatch('page/setPageSize', val).then(() => {
-        this.$emit('change')
-      })
       this.$emit('pagination', { page: this.currentPage, limit: val })
       if (this.autoScroll) {
         scrollTo(0, 800)
       }
     },
     handleCurrentChange(val) {
-      this.$store.dispatch('page/setPage', val).then(() => {
-        this.$emit('change')
-      })
       this.$emit('pagination', { page: val, limit: this.pageSize })
       if (this.autoScroll) {
         scrollTo(0, 800)
@@ -98,10 +104,10 @@ export default {
 <style scoped>
 .pagination-container {
   background: #fff;
-  padding: 32px 16px;
+  padding: 16px;
 }
-
 .pagination-container.hidden {
   display: none;
 }
+
 </style>

@@ -10,6 +10,14 @@ export function fetchPublishedChapter(id) {
   })
 }
 
+export function fetchPublishedChaptersByDocId(query) {
+  return request({
+    url: `/chapter`,
+    method: 'get',
+    params: query
+  })
+}
+
 export function like(id) {
   return request({
     url: `/chapter/like/${id}`,

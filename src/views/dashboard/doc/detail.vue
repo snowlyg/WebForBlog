@@ -6,16 +6,28 @@
           <div style="padding: 14px;">
             <div class="content_title">{{ detail.title }}</div>
             <div class="auth_content">
-              <el-tooltip content="文档名称" placement="top"><svg-icon icon-class="folder" class="svg-icon" /></el-tooltip><span> {{ detail.doc.name }} </span> /
-              <el-tooltip content="文章作者" placement="top"><svg-icon icon-class="author" class="svg-icon" /></el-tooltip> <span>{{ detail.author }} </span> /
+              <el-tooltip content="文档名称" placement="top">
+                <svg-icon icon-class="folder" class="svg-icon" />
+              </el-tooltip>
+              <span> {{ detail.doc.name }} </span> /
+              <el-tooltip content="文章作者" placement="top">
+                <svg-icon icon-class="author" class="svg-icon" />
+              </el-tooltip>
+              <span>{{ detail.author }} </span> /
               <el-tooltip content="阅读量" placement="top">
                 <svg-icon icon-class="eye-filer" class="svg-icon eye-filer" />
-              </el-tooltip><span>{{ detail.read }} </span> /
+              </el-tooltip>
+              <span>{{ detail.read }} </span> /
               <el-tooltip content="点赞文章" placement="top">
                 <transition name="fade">
                   <svg-icon v-if="show" icon-class="like" class="svg-icon" @click="likeChapter(detail.id)" />
-                </transition> </el-tooltip><span>{{ detail.like }} </span> /
-              <el-tooltip content="发布时间" placement="top"><svg-icon icon-class="time" class="svg-icon" /></el-tooltip> <time class="time">{{ detail.display_at | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</time>
+                </transition>
+              </el-tooltip>
+              <span>{{ detail.like }} </span> /
+              <el-tooltip content="发布时间" placement="top">
+                <svg-icon icon-class="time" class="svg-icon" />
+              </el-tooltip>
+              <time class="time">{{ detail.display_at | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</time>
             </div>
             <hr>
             <div>
@@ -26,6 +38,15 @@
           </div>
         </el-card>
       </el-row>
+
+      <doc-pagination
+        v-show="total>0"
+        :total="total"
+        :page.sync="listQuery.page"
+        :limit.sync="listQuery.limit"
+        @pagination="getList"
+      />
+
       <!-- you can add element-ui's tooltip -->
       <el-tooltip placement="top" content="返回顶部">
         <back-to-top
@@ -41,13 +62,14 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { fetchPublishedChapter, like } from '@/api/chapter'
+import { fetchPublishedChapter, fetchPublishedChaptersByDocId, like } from '@/api/chapter'
 import '@toast-ui/editor/dist/toastui-editor-viewer.css'
 import Viewer from '@toast-ui/editor/dist/toastui-editor-viewer'
 import 'highlight.js/styles/github.css'
 import hljs from 'highlight.js'
 import codeSyntaxHighlight from '@toast-ui/editor-plugin-code-syntax-highlight'
 import BackToTop from '@/components/BackToTop'
+import DocPagination from '@/components/DocPagination'
 
 const defaultDetail = {
   status: 'draft',
@@ -79,7 +101,7 @@ export default {
     }
   },
   name: 'DashboardEditor',
-  components: { BackToTop },
+  components: { BackToTop, DocPagination },
   data() {
     return {
       show: true,
@@ -93,12 +115,22 @@ export default {
         'border-radius': '4px',
         'line-height': '45px', // 请保持与高度一致以垂直居中 Please keep consistent with height to center vertically
         background: '#e7eaf1'// 按钮的背景颜色 The background color of the button
+      },
+      total: 0,
+      listLoading: true,
+      listQuery: {
+        sort: 'asc',
+        orderBy: 'sort',
+        docId: 0,
+        page: 1,
+        limit: 1
       }
     }
   },
   created() {
     const id = this.$route.params && this.$route.params.id
     this.getDetail(id)
+    this.getList()
   },
   methods: {
     likeChapter(id) {
@@ -113,13 +145,23 @@ export default {
     getDetail(id) {
       fetchPublishedChapter(id).then(response => {
         this.detail = response.data
-
+        this.listQuery.docId = this.detail.doc.id
         new Viewer({
           el: document.querySelector('#viewer'),
           height: '600px',
           initialValue: this.detail.content,
           plugins: [[codeSyntaxHighlight, { hljs }]]
         })
+      })
+    },
+    getList() {
+      this.listLoading = true
+      fetchPublishedChaptersByDocId(this.listQuery).then(response => {
+        if (response.data.items.length === 1) {
+          this.getDetail(response.data.items[0].id)
+        }
+        this.total = response.data.total
+        this.listLoading = false
       })
     }
   },
@@ -134,9 +176,12 @@ export default {
 .fade-enter-active, .fade-leave-active {
   transition: opacity .5s;
 }
-.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */
+{
   opacity: 0;
 }
+
 @media (min-width: 501px) {
   .clearfix:before,
   .clearfix:after {
@@ -171,17 +216,19 @@ export default {
       color: #aaa;
       line-height: normal;
 
-      span{
+      span {
         margin-right: 8px;
       }
+
       time {
         margin-left: 0;
       }
 
-      .svg-icon{
+      .svg-icon {
         margin: 0 3px 0 10px;
       }
-      .eye-filer{
+
+      .eye-filer {
         font-size: 14px;
         padding-top: 4px;
       }
@@ -254,18 +301,19 @@ export default {
       color: #aaa;
       line-height: normal;
 
-      span{
+      span {
         margin-right: 8px;
       }
+
       time {
         margin-left: 0;
       }
 
-      .svg-icon{
+      .svg-icon {
         margin: 0 3px 0 10px;
       }
 
-      .eye-filer{
+      .eye-filer {
         font-size: 14px;
         padding-top: 4px;
       }

@@ -1,5 +1,10 @@
 <template>
   <div class="app-container">
+    <el-button type="primary" style="margin-bottom: 30px">
+      <router-link :to="'/admin/doc/create'">
+        添加章节
+      </router-link>
+    </el-button>
     <el-table ref="dragTable" v-loading="listLoading" :data="list" border fit highlight-current-row style="width: 100%">
       <el-table-column width="60px" align="center" label="排序">
         <template slot-scope="scope">
@@ -81,7 +86,7 @@
 </template>
 
 <script>
-import { getChapters, sortChapter, setChapterSort } from '@/api/chapter'
+import { getChapters, setChapterSort, sortChapter } from '@/api/chapter'
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 import Sortable from 'sortablejs'
 
@@ -143,8 +148,8 @@ export default {
       // eslint-disable-next-line eqeqeq
       if (code === 200) {
         for (let index = 0; index < this.list.length; index++) {
-          if (this.list[index].id === data.id) {
-            this.list[index].sort = data.sort
+          if (this.list[ index ].id === data.id) {
+            this.list[ index ].sort = data.sort
             break
           }
         }
@@ -188,6 +193,7 @@ export default {
   color: #fff !important;
   background: #42b983 !important;
 }
+
 </style>
 
 <style scoped>
@@ -204,4 +210,5 @@ export default {
 .show-d {
   margin-top: 15px;
 }
+
 </style>
