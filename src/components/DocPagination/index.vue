@@ -103,11 +103,31 @@ export default {
 
 <style scoped>
 .pagination-container {
-  background: #fff;
-  padding: 16px;
+  /*background: #fff;*/
+  padding: 0;
 }
 .pagination-container.hidden {
   display: none;
+}
+
+.pagination-container >>> .el-pagination .btn-next {
+  padding: 8px 30px 33px 30px;
+  float: right;
+}
+.pagination-container >>> .el-pagination .btn-prev {
+  padding: 8px 30px 33px 30px;
+  float: left;
+}
+
+.pagination-container >>> .el-pagination span:not([class*=suffix]), .el-pagination button {
+  display: inline-block;
+
+  font-size: 13px;
+  min-width: 35.5px;
+  height: 28px;
+  vertical-align: top;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 </style>

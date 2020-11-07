@@ -41,6 +41,8 @@
 
       <doc-pagination
         v-show="total>0"
+        :next-text="next"
+        :prev-text="prev"
         :total="total"
         :page.sync="listQuery.page"
         :limit.sync="listQuery.limit"
@@ -116,6 +118,8 @@ export default {
         'line-height': '45px', // 请保持与高度一致以垂直居中 Please keep consistent with height to center vertically
         background: '#e7eaf1'// 按钮的背景颜色 The background color of the button
       },
+      next: '下一页',
+      prev: '上一页',
       total: 0,
       listLoading: true,
       listQuery: {
@@ -123,7 +127,7 @@ export default {
         orderBy: 'sort',
         docId: 0,
         page: 1,
-        limit: 1
+        limit: 3
       }
     }
   },
