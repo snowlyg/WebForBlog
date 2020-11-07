@@ -127,7 +127,7 @@ export default {
         orderBy: 'sort',
         docId: 0,
         page: 1,
-        limit: 3
+        limit: 1
       }
     }
   },
