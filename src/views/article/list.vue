@@ -1,5 +1,10 @@
 <template>
   <div class="app-container">
+    <el-button type="primary" style="margin-bottom: 30px">
+      <router-link :to="'/admin/article/create'">
+        添加文章
+      </router-link>
+    </el-button>
     <el-table v-loading="listLoading" :data="list" border fit highlight-current-row style="width: 100%">
       <el-table-column align="center" label="ID" width="80">
         <template slot-scope="scope">

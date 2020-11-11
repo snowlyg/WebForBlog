@@ -195,6 +195,7 @@ export const asyncRoutes = [
       {
         path: '/admin/article/create',
         component: () => import('@/views/article/create'),
+        hidden: true,
         name: '创建文章',
         meta: {
           title: '创建文章',
