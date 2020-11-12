@@ -49,6 +49,7 @@ service.interceptors.response.use(
     if (res.code !== 200) {
       if (res.code === 401) {
         this.$router.push('/admin/login')
+        return
       }
 
       Message({
