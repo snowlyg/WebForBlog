@@ -465,13 +465,13 @@ export default {
       })
     },
     getRemoteTypeList() {
-      getTypes().then(response => {
+      getTypes({ page: -1, limit: -1 }).then(response => {
         if (!response.data || response.data.total === 0) return
         this.typeListOptions = this.typeListOptions.concat(response.data.items)
       })
     },
     getRemoteTagList() {
-      getTags().then(response => {
+      getTags({ page: -1, limit: -1 }).then(response => {
         if (!response.data || response.data.total === 0) return
         this.tagListOptions = this.tagListOptions.concat(response.data.items)
       })
