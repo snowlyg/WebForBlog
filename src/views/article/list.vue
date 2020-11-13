@@ -96,6 +96,11 @@ export default {
       total: 0,
       listLoading: true,
       listQuery: {
+        tagId: 0,
+        typeId: 0,
+        title: '',
+        orderBy: 'display_time',
+        relation: 'Type',
         page: 1,
         limit: 20
       }

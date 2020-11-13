@@ -65,26 +65,21 @@
                   </el-col>
                   <el-col :span="12">
                     <el-form-item label-width="60px" label="标签:" class="postInfo-container-item">
-                      <el-tag
-                        v-for="tag in postForm.tag_names"
-                        :key="tag"
-                        closable
-                        :disable-transitions="false"
-                        @close="handleClose(tag)"
+                      <el-select
+                        v-model="postForm.tag_names"
+                        multiple
+                        filterable
+                        allow-create
+                        default-first-option
+                        placeholder="请选择文章标签"
                       >
-                        {{ tag }}
-                      </el-tag>
-                      <el-input
-                        v-if="inputVisible"
-                        ref="saveTagInput"
-                        v-model="inputValue"
-                        class="input-new-tag"
-                        size="small"
-                        @keyup.enter.native="handleInputConfirm"
-                        @blur="handleInputConfirm"
-                      />
-                      <el-button v-else class="button-new-tag" style="margin: 0" size="small" @click="showInput">+
-                      </el-button>
+                        <el-option
+                          v-for="item in tagListOptions"
+                          :key="item.id"
+                          :label="item.name"
+                          :value="item.name"
+                        />
+                      </el-select>
                     </el-form-item>
                   </el-col>
                 </el-row>
@@ -189,6 +184,7 @@ import { validURL } from '@/utils/validate'
 import { createArticle, deleteArticle, fetchArticle, updateArticle } from '@/api/article'
 import { searchUser } from '@/api/remote-search'
 import { getTypes } from '@/api/type'
+import { getTags } from '@/api/tag'
 import Warning from './Warning'
 import { CommentDropdown, PlatformDropdown, SourceUrlDropdown } from './Dropdown'
 
@@ -269,6 +265,7 @@ export default {
       loading: false,
       userListOptions: [],
       typeListOptions: [{ id: 0, name: '请选择分类' }],
+      tagListOptions: [{ id: 0, name: '请选择标签' }],
       rules:
         {
           image_uri: [{ validator: validateRequire }],
@@ -323,6 +320,7 @@ export default {
     }
     this.getRemoteUserList()
     this.getRemoteTypeList()
+    this.getRemoteTagList()
 
     // Why need to make a copy of this.$route here?
     // Because if you enter this page and quickly switch tag, may be in the execution of the setTagsViewTitle function, this.$route is no longer pointing to the current page
@@ -330,29 +328,6 @@ export default {
     this.tempRoute = Object.assign({}, this.$route)
   },
   methods: {
-    handleClose(tag) {
-      this.postForm.tag_names.splice(this.postForm.tag_names.indexOf(tag), 1)
-    },
-
-    showInput() {
-      this.inputVisible = true
-      this.$nextTick(_ => {
-        this.$refs.saveTagInput.$refs.input.focus()
-      })
-    },
-
-    handleInputConfirm() {
-      const inputValue = this.inputValue
-      if (inputValue) {
-        if (this.postForm.tag_names) {
-          this.postForm.tag_names.push(inputValue)
-        } else {
-          this.postForm.tag_names = [inputValue]
-        }
-      }
-      this.inputVisible = false
-      this.inputValue = ''
-    },
     rmImage() {
       this.postForm.image_uri = ''
     },
@@ -493,6 +468,12 @@ export default {
       getTypes().then(response => {
         if (!response.data || response.data.total === 0) return
         this.typeListOptions = this.typeListOptions.concat(response.data.items)
+      })
+    },
+    getRemoteTagList() {
+      getTags().then(response => {
+        if (!response.data || response.data.total === 0) return
+        this.tagListOptions = this.tagListOptions.concat(response.data.items)
       })
     },
     getHtml() {
