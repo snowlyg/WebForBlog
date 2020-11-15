@@ -26,6 +26,14 @@
       </el-table-column>
     </el-table>
 
+    <pagination
+      v-show="total>0"
+      :total="total"
+      :page.sync="listQuery.page"
+      :limit.sync="listQuery.limit"
+      @pagination="getDocs"
+    />
+
     <el-dialog :visible.sync="dialogVisible" :title="dialogDoc==='edit'?'编辑文档':'添加文档'">
       <el-form :model="doc" label-width="80px" label-position="left">
         <el-form-item label="名称">
@@ -44,6 +52,7 @@
 
 import { deepClone } from '@/utils'
 import { addDoc, deleteDoc, getDocs, updateDoc } from '@/api/doc'
+import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 
 const defaultDoc = {
   id: 0,
@@ -51,6 +60,7 @@ const defaultDoc = {
 }
 
 export default {
+  components: { Pagination },
   data() {
     return {
       doc: Object.assign({}, defaultDoc),
@@ -61,6 +71,13 @@ export default {
       defaultProps: {
         children: 'children',
         label: 'title'
+      },
+      total: 0,
+      listQuery: {
+        sort: 'asc',
+        orderBy: 'created_at',
+        page: 1,
+        limit: 20
       }
     }
   },
@@ -70,8 +87,9 @@ export default {
   },
   methods: {
     async getDocs() {
-      const res = await getDocs()
+      const res = await getDocs(this.listQuery)
       this.docsList = res.data.items
+      this.total = res.data.total
     },
     handleAddDoc() {
       this.doc = Object.assign({}, defaultDoc)

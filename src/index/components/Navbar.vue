@@ -3,11 +3,11 @@
     <el-menu class="el-menu-demo" mode="horizontal" @select="handleSelect">
       <el-submenu index="1">
         <template slot="title">技术文章</template>
-        <el-menu-item v-for="(item) in types" index="0">{{ item.name }}</el-menu-item>
+        <el-menu-item v-for="(item) in types" :index="item.id.toString()">{{ item.name }}</el-menu-item>
       </el-submenu>
       <el-submenu index="2">
         <template slot="title">文档翻译</template>
-        <el-menu-item v-for="(item) in docs" index="0">{{ item.name }}</el-menu-item>
+        <el-menu-item v-for="(item) in docs" :index="item.id.toString()">{{ item.name }}</el-menu-item>
       </el-submenu>
     </el-menu>
     <div class="text-center">
@@ -28,6 +28,7 @@ import { mapGetters } from 'vuex'
 import PanThumb from '@/components/PanThumb'
 import { getPublishedDocs } from '@/api/doc'
 import { getAdminInfo } from '@/api/user'
+import { getArticleTypes } from '@/api/type'
 
 export default {
   components: { PanThumb },
@@ -41,6 +42,7 @@ export default {
   created() {
     this.getAdmin()
     this.getDocs()
+    this.getType()
   },
   // eslint-disable-next-line vue/order-in-components
   computed: {
@@ -61,6 +63,13 @@ export default {
         })
         window.open(newpage.href, '_blank')
       }
+    },
+    getType() {
+      getArticleTypes({ page: -1, limit: -1 }).then(response => {
+        this.$store.dispatch('type/setTypes', response.data.items).then(() => {
+          this.$emit('change')
+        })
+      })
     },
     getDocs() {
       getPublishedDocs({ offset: -1, limit: -1 }).then(response => {

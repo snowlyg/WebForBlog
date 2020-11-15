@@ -3,10 +3,7 @@
     <el-pagination
       style="text-align: center"
       :background="background"
-      :current-page.sync="currentPage"
-      :page-size.sync="pageSize"
       :layout="layout"
-      :page-sizes="pageSizes"
       :total="total"
       :prev-text="prevText"
       :next-text="nextText"

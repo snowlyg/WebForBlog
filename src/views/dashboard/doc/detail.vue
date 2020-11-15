@@ -39,17 +39,6 @@
         </el-card>
       </el-row>
 
-      <doc-pagination
-        v-show="total>0"
-        :next-text="next"
-        :prev-text="prev"
-        :total="total"
-        :page.sync="listQuery.page"
-        :limit.sync="listQuery.limit"
-        @pagination="getList"
-      />
-
-      <!-- you can add element-ui's tooltip -->
       <el-tooltip placement="top" content="返回顶部">
         <back-to-top
           :custom-style="myBackToTopStyle"
@@ -64,14 +53,13 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { fetchPublishedChapter, fetchPublishedChaptersByDocId, like } from '@/api/chapter'
+import { fetchPublishedChapter, like } from '@/api/chapter'
 import '@toast-ui/editor/dist/toastui-editor-viewer.css'
 import Viewer from '@toast-ui/editor/dist/toastui-editor-viewer'
 import 'highlight.js/styles/github.css'
 import hljs from 'highlight.js'
 import codeSyntaxHighlight from '@toast-ui/editor-plugin-code-syntax-highlight'
 import BackToTop from '@/components/BackToTop'
-import DocPagination from '@/components/DocPagination'
 
 const defaultDetail = {
   status: 'draft',
@@ -103,7 +91,7 @@ export default {
     }
   },
   name: 'DashboardEditor',
-  components: { BackToTop, DocPagination },
+  components: { BackToTop },
   data() {
     return {
       show: true,
@@ -118,23 +106,12 @@ export default {
         'line-height': '45px', // 请保持与高度一致以垂直居中 Please keep consistent with height to center vertically
         background: '#e7eaf1'// 按钮的背景颜色 The background color of the button
       },
-      next: '下一页',
-      prev: '上一页',
-      total: 0,
-      listLoading: true,
-      listQuery: {
-        sort: 'asc',
-        orderBy: 'sort',
-        docId: 0,
-        page: 1,
-        limit: 1
-      }
+      listLoading: true
     }
   },
   created() {
     const id = this.$route.params && this.$route.params.id
     this.getDetail(id)
-    this.getList()
   },
   methods: {
     likeChapter(id) {
@@ -149,23 +126,12 @@ export default {
     getDetail(id) {
       fetchPublishedChapter(id).then(response => {
         this.detail = response.data
-        this.listQuery.docId = this.detail.doc.id
         new Viewer({
           el: document.querySelector('#viewer'),
           height: '600px',
           initialValue: this.detail.content,
           plugins: [[codeSyntaxHighlight, { hljs }]]
         })
-      })
-    },
-    getList() {
-      this.listLoading = true
-      fetchPublishedChaptersByDocId(this.listQuery).then(response => {
-        if (response.data.items.length === 1) {
-          this.getDetail(response.data.items[0].id)
-        }
-        this.total = response.data.total
-        this.listLoading = false
       })
     }
   },

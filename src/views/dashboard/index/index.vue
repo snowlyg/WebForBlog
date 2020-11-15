@@ -94,7 +94,7 @@ export default {
   // eslint-disable-next-line no-sequences
   created() {
     this.getData()
-    this.getTypeTag()
+    this.getTag()
   },
   methods: {
     getData() {
@@ -107,12 +107,7 @@ export default {
         this.listQuery.limit = response.data.limit
       })
     },
-    getTypeTag() {
-      getArticleTypes({ page: -1, limit: -1 }).then(response => {
-        this.$store.dispatch('type/setTypes', response.data.items).then(() => {
-          this.$emit('change')
-        })
-      })
+    getTag() {
       getArticleTags({ page: -1, limit: -1 }).then(response => {
         this.tags = response.data.items
       })

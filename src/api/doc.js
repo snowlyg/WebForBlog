@@ -17,10 +17,11 @@ export function getPublishedDoc(id) {
   })
 }
 
-export function getDocs() {
+export function getDocs(query) {
   return request({
     url: '/admin/docs',
-    method: 'get'
+    method: 'get',
+    params: query
   })
 }
 
