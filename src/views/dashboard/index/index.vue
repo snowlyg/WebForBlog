@@ -28,7 +28,7 @@
               <img :src="item.image_uri" alt="" class="image">
               <div class="left_content">
                 <router-link target="_blank" :to="'/detail/'+item.id" class="link-type">
-                  <div class="content_title"> {{ item.title }}</div>
+                  <div class="content_title"> {{ item.is_original?'原创：':'转载：' }} {{ item.title }}</div>
                 </router-link>
                 <div class="content_short"> {{ item.content_short }}</div>
                 <div class="auth_content">
@@ -59,7 +59,6 @@
 import { mapGetters } from 'vuex'
 import { indexList } from '@/api/article'
 import { getArticleTags } from '@/api/tag'
-import { getArticleTypes } from '@/api/type'
 import SimplePagination from '@/components/SimplePagination'
 
 export default {

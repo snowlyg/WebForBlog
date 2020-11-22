@@ -19,7 +19,7 @@ export function indexDetail(id) {
   return request({
     url: `/article/${id}`,
     method: 'get',
-    params: { relation: 'Type;Tags' }
+    params: { relation: 'Type,Tags' }
   })
 }
 export function fetchList(query) {
@@ -35,7 +35,7 @@ export function fetchArticle(id) {
     url: `/admin/article/${id}`,
     method: 'get',
     params: {
-      relation: 'Type;Tags'
+      relation: 'Type,Tags'
     }
   })
 }
