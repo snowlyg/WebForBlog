@@ -11,7 +11,7 @@
               <el-tooltip content="阅读量" placement="top">
                 <svg-icon icon-class="eye-filer" class="svg-icon eye-filer" />
               </el-tooltip><span>{{ detail.read }} </span> /
-              <el-tooltip content="点赞文章" placement="top">
+              <el-tooltip content="点赞文章" placement="top" style="color: #19AAE3">
                 <transition name="fade">
                   <svg-icon v-if="show" icon-class="like" class="svg-icon" @click="likeArticle(detail.id)" />
                 </transition> </el-tooltip><span>{{ detail.like }} </span> /
