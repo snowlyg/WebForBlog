@@ -1,9 +1,7 @@
 <template>
   <div class="navbar">
     <el-menu class="el-menu-demo" mode="horizontal" @select="handleSelect">
-      <el-menu-item index="0">
-        <svg-icon icon-class="home" style="font-size:25px;margin:0" />
-      </el-menu-item>
+      <el-menu-item index="0">首页</el-menu-item>
       <el-submenu index="1">
         <template slot="title">技术文章</template>
         <el-menu-item v-for="(item) in types" :index="item.id.toString()">{{ item.name }}</el-menu-item>

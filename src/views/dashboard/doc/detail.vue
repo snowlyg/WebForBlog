@@ -20,7 +20,7 @@
               <span>{{ detail.read }} </span> /
               <el-tooltip content="点赞文章" placement="top">
                 <transition name="fade">
-                  <svg-icon v-if="show" icon-class="like" class="svg-icon" @click="likeChapter(detail.id)" />
+                  <svg-icon v-if="show" icon-class="like" class="svg-icon" @click="likeChapterHandler()" />
                 </transition>
               </el-tooltip>
               <span>{{ detail.like }} </span> /
@@ -38,6 +38,14 @@
           </div>
         </el-card>
       </el-row>
+      <div style="margin-top: 30px;" class="text-center">
+        <el-button-group>
+          <el-button type="primary" :disabled="prevable" icon="el-icon-arrow-left" @click="prevChapterHandler()">上一页
+          </el-button>
+          <el-button type="primary" @click="nextChapterHandler()">下一页<i class="el-icon-arrow-right el-icon--right" />
+          </el-button>
+        </el-button-group>
+      </div>
 
       <el-tooltip placement="top" content="返回顶部">
         <back-to-top
@@ -53,7 +61,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { fetchPublishedChapter, like } from '@/api/chapter'
+import { fetchPublishedChapter, likeChapter, nextChapter, prevChapter } from '@/api/chapter'
 import '@toast-ui/editor/dist/toastui-editor-viewer.css'
 import Viewer from '@toast-ui/editor/dist/toastui-editor-viewer'
 import 'highlight.js/styles/github.css'
@@ -77,7 +85,8 @@ const defaultDetail = {
   like: 0,
   read: 0,
   doc: {
-    name: ''
+    name: '',
+    chapter_mun: 0
   }
 }
 
@@ -106,7 +115,9 @@ export default {
         'line-height': '45px', // 请保持与高度一致以垂直居中 Please keep consistent with height to center vertically
         background: '#e7eaf1'// 按钮的背景颜色 The background color of the button
       },
-      listLoading: true
+      listLoading: true,
+      prevable: false,
+      nextable: false
     }
   },
   created() {
@@ -114,24 +125,60 @@ export default {
     this.getDetail(id)
   },
   methods: {
-    likeChapter(id) {
-      like(id).then(response => {
-        this.detail.like = response.data.like
-        this.show = !this.show
-        setTimeout(() => {
+    likeChapterHandler() {
+      likeChapter(this.detail.id).then(response => {
+        if (response.code === 200) {
+          this.detail.like = response.data.like
           this.show = !this.show
-        }, 1)
+          setTimeout(() => {
+            this.show = !this.show
+          }, 1)
+        }
+      })
+    },
+    prevChapterHandler() {
+      prevChapter(this.detail.sort).then(response => {
+        if (response.code === 200) {
+          this.detail = response.data
+          this.prevable = this.detail.sort <= 1
+          this.nextable = this.detail.sort >= this.detail.doc.chapter_mun
+          new Viewer({
+            el: document.querySelector('#viewer'),
+            height: '600px',
+            initialValue: this.detail.content,
+            plugins: [[codeSyntaxHighlight, { hljs }]]
+          })
+        }
+      })
+    },
+    nextChapterHandler() {
+      nextChapter(this.detail.sort).then(response => {
+        if (response.code === 200) {
+          this.detail = response.data
+          this.prevable = this.detail.sort <= 1
+          this.nextable = this.detail.sort >= this.detail.doc.chapter_mun
+          new Viewer({
+            el: document.querySelector('#viewer'),
+            height: '600px',
+            initialValue: this.detail.content,
+            plugins: [[codeSyntaxHighlight, { hljs }]]
+          })
+        }
       })
     },
     getDetail(id) {
       fetchPublishedChapter(id).then(response => {
-        this.detail = response.data
-        new Viewer({
-          el: document.querySelector('#viewer'),
-          height: '600px',
-          initialValue: this.detail.content,
-          plugins: [[codeSyntaxHighlight, { hljs }]]
-        })
+        if (response.code === 200) {
+          this.detail = response.data
+          this.prevable = this.detail.sort <= 1
+          this.nextable = this.detail.sort >= this.detail.doc.chapter_mun
+          new Viewer({
+            el: document.querySelector('#viewer'),
+            height: '600px',
+            initialValue: this.detail.content,
+            plugins: [[codeSyntaxHighlight, { hljs }]]
+          })
+        }
       })
     }
   },

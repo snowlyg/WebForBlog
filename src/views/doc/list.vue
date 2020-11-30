@@ -147,12 +147,7 @@ export default {
       const { code, data } = await setChapterSort(this.chapter, this.chapter.id)
       // eslint-disable-next-line eqeqeq
       if (code === 200) {
-        for (let index = 0; index < this.list.length; index++) {
-          if (this.list[ index ].id === data.id) {
-            this.list[ index ].sort = data.sort
-            break
-          }
-        }
+        this.getList()
       }
       this.dialogVisible = false
       this.$notify({
@@ -173,11 +168,10 @@ export default {
         },
         onEnd: evt => {
           const old = this.list[ evt.oldIndex ]
-          const other = this.list[ evt.newIndex ]
-          sortChapter({ old_id: old.id, old_sort: other.sort, new_id: other.id, new_sort: old.sort }).then(response => {
+          const ne = this.list[ evt.newIndex ]
+          sortChapter({ old_id: old.id, old_sort: ne.sort, new_id: ne.id, new_sort: old.sort }).then(response => {
             if (response.code === 200) {
-              this.list[ evt.oldIndex ].sort = other.sort
-              this.list[ evt.newIndex ].sort = old.sort
+              this.getList()
             }
           })
         }

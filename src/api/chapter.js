@@ -18,9 +18,23 @@ export function fetchPublishedChaptersByDocId(query) {
   })
 }
 
-export function like(id) {
+export function likeChapter(id) {
   return request({
     url: `/chapter/like/${id}`,
+    method: 'get'
+  })
+}
+
+export function prevChapter(sort) {
+  return request({
+    url: `/chapter/prev/${sort}`,
+    method: 'get'
+  })
+}
+
+export function nextChapter(sort) {
+  return request({
+    url: `/chapter/next/${sort}`,
     method: 'get'
   })
 }
