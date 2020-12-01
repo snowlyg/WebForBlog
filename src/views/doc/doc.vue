@@ -20,6 +20,7 @@
               章节管理
             </router-link>
           </el-button>
+          <el-button type="primary" size="small" @click="handleSetChapterMun(scope)">设置章节数</el-button>
           <el-button type="primary" size="small" @click="handleEdit(scope)">编辑</el-button>
           <el-button type="danger" size="small" @click="handleDelete(scope)">删除</el-button>
         </template>
@@ -45,18 +46,30 @@
         <el-button type="primary" @click="confirmDoc">确认</el-button>
       </div>
     </el-dialog>
+    <el-dialog :visible.sync="dialogChapterMunVisible" title="设置章节数">
+      <el-form :model="doc" label-width="80px" label-position="left">
+        <el-form-item label="章节数">
+          <el-input-number v-model="doc.chapter_mun" type="number" placeholder="章节数" />
+        </el-form-item>
+      </el-form>
+      <div style="text-align:right;">
+        <el-button type="danger" @click="dialogVisible=false">取消</el-button>
+        <el-button type="primary" @click="confirmSet">确认</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 
 import { deepClone } from '@/utils'
-import { addDoc, deleteDoc, getDocs, updateDoc } from '@/api/doc'
-import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
+import { addDoc, deleteDoc, getDocs, setChapterMun, updateDoc } from '@/api/doc'
+import Pagination from '@/components/Pagination'
 
 const defaultDoc = {
   id: 0,
-  name: ''
+  name: '',
+  chapter_mun: 0
 }
 
 export default {
@@ -66,6 +79,7 @@ export default {
       doc: Object.assign({}, defaultDoc),
       docsList: [],
       dialogVisible: false,
+      dialogChapterMunVisible: false,
       dialogDoc: 'new',
       checkStrictly: false,
       defaultProps: {
@@ -86,6 +100,20 @@ export default {
     this.getDocs()
   },
   methods: {
+    handleSetChapterMun(scope) {
+      this.dialogChapterMunVisible = true
+      this.doc = scope.row
+    },
+    async confirmSet() {
+      await setChapterMun(this.doc.id, { chapter_mun: this.doc.chapter_mun })
+      this.dialogChapterMunVisible = false
+      this.$notify({
+        title: 'Success',
+        dangerouslyUseHTMLString: true,
+        message: `设置成功`,
+        type: 'success'
+      })
+    },
     async getDocs() {
       const res = await getDocs(this.listQuery)
       this.docsList = res.data.items

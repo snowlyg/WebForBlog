@@ -144,7 +144,7 @@ export default {
       })
     },
     async confirmSort() {
-      const { code, data } = await setChapterSort(this.chapter, this.chapter.id)
+      const { code } = await setChapterSort(this.chapter, this.chapter.id)
       // eslint-disable-next-line eqeqeq
       if (code === 200) {
         this.getList()

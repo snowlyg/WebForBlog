@@ -96,9 +96,9 @@ export function sortChapter(data) {
   })
 }
 
-export function deleteChapter(id) {
+export function deleteChapter(id, docId) {
   return request({
-    url: `/admin/chapters/${id}`,
+    url: `/admin/chapters/${id}/doc/${docId}`,
     method: 'delete'
   })
 }

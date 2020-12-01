@@ -39,6 +39,15 @@ export function fetchDoc(id) {
     method: 'get'
   })
 }
+
+export function setChapterMun(id, data) {
+  return request({
+    url: `/admin/docs/${id}/set_chapter_mun`,
+    method: 'put',
+    data
+  })
+}
+
 export function updateDoc(id, data) {
   return request({
     url: `/admin/docs/${id}`,

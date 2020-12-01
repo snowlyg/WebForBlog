@@ -415,7 +415,7 @@ export default {
     deleteForm() {
       this.loading = true
       // eslint-disable-next-line no-undef
-      deleteChapter(this.postForm.id).then(response => {
+      deleteChapter(this.postForm.id, this.postForm.doc.id).then(response => {
         if (response.code === 200) {
           this.$notify({
             title: '成功',
