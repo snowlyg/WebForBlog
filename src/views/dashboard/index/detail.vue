@@ -28,6 +28,9 @@
                 {{ tag_name }}
               </el-tag>
             </div>
+            <div v-if="detail.source_uri != ''" style="margin-top: 20px;">
+                原文地址：<a :href="detail.source_uri">{{detail.source_uri}}</a>
+            </div>
             <div class="bottom clearfix" />
           </div>
         </el-card>

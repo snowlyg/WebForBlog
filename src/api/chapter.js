@@ -28,14 +28,21 @@ export function likeChapter(id) {
 export function prevChapter(sort) {
   return request({
     url: `/chapter/prev/${sort}`,
-    method: 'get'
+    method: 'get',
+    params: {
+      relation: 'Doc'
+    }
+
   })
 }
 
 export function nextChapter(sort) {
   return request({
     url: `/chapter/next/${sort}`,
-    method: 'get'
+    method: 'get',
+    params: {
+      relation: 'Doc'
+    }
   })
 }
 
